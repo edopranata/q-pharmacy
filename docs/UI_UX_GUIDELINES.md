@@ -782,7 +782,7 @@ app.config.errorHandler = (err, vm, info) => {
 - [Design System](./DESIGN_SYSTEM.md) - Visual design tokens and components
 - [Accessibility Guidelines](./ACCESSIBILITY.md) - Inclusive design practices
 - [Component Style Guide](../frontend/web/docs/COMPONENTS.md) - Component implementation details
-- [Implementation Roadmap](../ROADMAP.md) - Development timeline and priorities
+- [Implementation Roadmap](./ROADMAP.md) - Development timeline and priorities
 
 ## Best Practices Summary
 

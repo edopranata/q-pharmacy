@@ -1080,7 +1080,7 @@ describe('MedicineForm Accessibility', () => {
 - [Design System](./DESIGN_SYSTEM.md) - Color palette and typography standards
 - [UI/UX Guidelines](./UI_UX_GUIDELINES.md) - User experience patterns
 - [Component Style Guide](../frontend/web/docs/COMPONENTS.md) - Accessible component implementations
-- [Implementation Roadmap](../ROADMAP.md) - Accessibility implementation timeline
+- [Implementation Roadmap](./ROADMAP.md) - Accessibility implementation timeline
 
 ## Resources
 

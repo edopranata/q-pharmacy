@@ -336,7 +336,7 @@ $input-border-radius: $border-radius-sm;
 - [UI/UX Guidelines](./UI_UX_GUIDELINES.md) - Navigation patterns and user journeys
 - [Accessibility Guidelines](./ACCESSIBILITY.md) - WCAG compliance and inclusive design
 - [Component Style Guide](../frontend/web/docs/COMPONENTS.md) - Component usage examples
-- [Implementation Roadmap](../ROADMAP.md) - Timeline and priorities
+- [Implementation Roadmap](./ROADMAP.md) - Timeline and priorities
 
 ## Maintenance
 

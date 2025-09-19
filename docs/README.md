@@ -1,5 +1,69 @@
 # Q-Pharmacy Documentation
 
+## 📋 Daftar Isi
+
+- [Overview](#overview)
+- [🏗️ Arsitektur Sistem](#️-arsitektur-sistem)
+- [📚 Struktur Dokumentasi](#-struktur-dokumentasi)
+  - [📖 Dokumentasi Umum](#-dokumentasi-umum)
+  - [🔧 Dokumentasi Backend](#-dokumentasi-backend)
+  - [🎨 Dokumentasi Frontend](#-dokumentasi-frontend)
+- [🚀 Quick Start](#-quick-start)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Docker Setup (Alternative)](#docker-setup-alternative)
+- [🏢 Fitur Utama](#-fitur-utama)
+  - [👥 Manajemen Pengguna](#-manajemen-pengguna)
+  - [💊 Manajemen Produk](#-manajemen-produk)
+  - [📦 Manajemen Inventori](#-manajemen-inventori)
+  - [🛒 Point of Sale (POS)](#-point-of-sale-pos)
+  - [📊 Pelaporan & Analytics](#-pelaporan--analytics)
+  - [🔧 Administrasi](#-administrasi)
+- [🛠️ Development Guidelines](#️-development-guidelines)
+  - [Code Standards](#code-standards)
+  - [Git Workflow](#git-workflow)
+  - [Testing Strategy](#testing-strategy)
+- [🔐 Security](#-security)
+  - [Authentication](#authentication)
+  - [Authorization](#authorization)
+  - [Data Protection](#data-protection)
+- [📈 Performance](#-performance)
+  - [Backend Optimization](#backend-optimization)
+  - [Frontend Optimization](#frontend-optimization)
+- [🚀 Deployment](#-deployment)
+  - [Environments](#environments)
+  - [CI/CD Pipeline](#cicd-pipeline)
+  - [Monitoring](#monitoring)
+- [📞 Support & Maintenance](#-support--maintenance)
+  - [Issue Tracking](#issue-tracking)
+  - [Maintenance Schedule](#maintenance-schedule)
+- [🤝 Contributing](#-contributing)
+  - [Development Process](#development-process)
+  - [Code Review Checklist](#code-review-checklist)
+- [📋 API Reference](#-api-reference)
+  - [Base Information](#base-information)
+  - [Core Endpoints](#core-endpoints)
+  - [Response Format](#response-format)
+- [🔧 Configuration](#-configuration)
+  - [Environment Variables](#environment-variables)
+- [📊 Monitoring & Analytics](#-monitoring--analytics)
+  - [Application Metrics](#application-metrics)
+  - [Business Metrics](#business-metrics)
+  - [Alerting](#alerting)
+- [🔄 Backup & Recovery](#-backup--recovery)
+  - [Backup Strategy](#backup-strategy)
+  - [Recovery Procedures](#recovery-procedures)
+- [📚 Learning Resources](#-learning-resources)
+  - [Documentation](#documentation)
+  - [Tutorials](#tutorials)
+- [🆘 Troubleshooting](#-troubleshooting)
+  - [Common Issues](#common-issues)
+  - [Debug Tools](#debug-tools)
+- [📞 Contact & Support](#-contact--support)
+  - [Development Team](#development-team)
+  - [Support Channels](#support-channels)
+- [📄 License](#-license)
+
 ## Overview
 
 Selamat datang di dokumentasi lengkap Q-Pharmacy - sistem manajemen apotek modern yang dibangun dengan teknologi terkini. Dokumentasi ini menyediakan panduan komprehensif untuk developer, administrator, dan pengguna sistem.
@@ -42,7 +106,7 @@ Q-Pharmacy dibangun dengan arsitektur modern yang terdiri dari:
 
 | Dokumen | Deskripsi | Target Audience |
 |---------|-----------|----------------|
-| [ROADMAP.md](../ROADMAP.md) | Roadmap pengembangan dan implementasi | Project Manager, Developer |
+| [ROADMAP.md](./ROADMAP.md) | Roadmap pengembangan dan implementasi | Project Manager, Developer |
 | [DEVELOPMENT_WORKFLOW.md](./DEVELOPMENT_WORKFLOW.md) | Workflow pengembangan dan guidelines | Developer, Tech Lead |
 
 ### 🔧 Dokumentasi Backend
@@ -81,7 +145,7 @@ Q-Pharmacy dibangun dengan arsitektur modern yang terdiri dari:
 #### 1. Clone Repository
 
 ```bash
-git clone https://github.com/your-org/q-pharmacy.git
+git clone https://github.com/edopranata/q-pharmacy.git
 cd q-pharmacy
 ```
 
@@ -487,9 +551,9 @@ kill -9 $(lsof -ti:3000)
 
 ### Support Channels
 
-- **Documentation**: [GitHub Wiki](https://github.com/your-org/q-pharmacy/wiki)
-- **Issues**: [GitHub Issues](https://github.com/your-org/q-pharmacy/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/your-org/q-pharmacy/discussions)
+- **Documentation**: [GitHub Wiki](https://github.com/edopranata/q-pharmacy/wiki)
+- **Issues**: [GitHub Issues](https://github.com/edopranata/q-pharmacy/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/edopranata/q-pharmacy/discussions)
 - **Slack**: #q-pharmacy-dev
 
 ## 📄 License
