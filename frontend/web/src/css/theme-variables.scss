@@ -1,0 +1,264 @@
+// =============================================================================
+// THEME VARIABLES - Q-PHARMACY SYSTEM
+// =============================================================================
+
+// =============================================================================
+// BRAND COLORS
+// =============================================================================
+$brand-primary: #1976d2;
+$brand-secondary: #26a69a;
+$brand-accent: #9c27b0;
+$brand-dark: #1d1d1d;
+$brand-positive: #21ba45;
+$brand-negative: #c10015;
+$brand-info: #31ccec;
+$brand-warning: #f2c037;
+
+// =============================================================================
+// PHARMACY SPECIFIC COLORS
+// =============================================================================
+$pharmacy-green: #4caf50;
+$pharmacy-blue: #2196f3;
+$pharmacy-red: #f44336;
+$pharmacy-orange: #ff9800;
+$pharmacy-purple: #9c27b0;
+$pharmacy-teal: #009688;
+
+// Medicine status colors
+$medicine-available: $pharmacy-green;
+$medicine-low-stock: $pharmacy-orange;
+$medicine-out-of-stock: $pharmacy-red;
+$medicine-expired: #795548;
+$medicine-near-expiry: $pharmacy-orange;
+
+// Transaction colors
+$transaction-success: $pharmacy-green;
+$transaction-pending: $pharmacy-orange;
+$transaction-failed: $pharmacy-red;
+$transaction-refund: $pharmacy-purple;
+
+// =============================================================================
+// SEMANTIC COLORS
+// =============================================================================
+$semantic-success: $brand-positive;
+$semantic-warning: $brand-warning;
+$semantic-error: $brand-negative;
+$semantic-info: $brand-info;
+
+// =============================================================================
+// LAYOUT DIMENSIONS
+// =============================================================================
+$header-height: 64px;
+$sidebar-width: 280px;
+$sidebar-collapsed-width: 64px;
+$footer-height: 48px;
+
+// Mobile breakpoints
+$mobile-breakpoint: 768px;
+$tablet-breakpoint: 1024px;
+$desktop-breakpoint: 1200px;
+
+// Breakpoint aliases
+$breakpoint-xs: 480px;
+$breakpoint-sm: $mobile-breakpoint;
+$breakpoint-md: $tablet-breakpoint;
+$breakpoint-lg: $desktop-breakpoint;
+$breakpoint-xl: 1440px;
+
+// =============================================================================
+// SPACING SYSTEM
+// =============================================================================
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-xxl: 48px;
+
+// Layout containers (defined after spacing variables)
+$layout-max-width: 1200px;
+$layout-padding: $spacing-lg;
+$layout-section-padding: $spacing-xxl;
+
+// =============================================================================
+// BORDER RADIUS
+// =============================================================================
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-lg: 12px;
+$border-radius-xl: 16px;
+$border-radius-round: 50%;
+
+// =============================================================================
+// SHADOWS
+// =============================================================================
+$shadow-light: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+$shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+$shadow-medium: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+$shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+$shadow-heavy: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+$shadow-card: 0 2px 4px rgba(0, 0, 0, 0.1);
+$shadow-modal: 0 25px 50px rgba(0, 0, 0, 0.25);
+
+// =============================================================================
+// TYPOGRAPHY
+// =============================================================================
+$font-family-primary: 'Inter', 'Roboto', '-apple-system', 'Helvetica Neue', sans-serif;
+$font-family-secondary: 'Poppins', 'Roboto', sans-serif;
+$font-family-mono: 'Fira Code', 'Monaco', 'Consolas', monospace;
+
+// Font weights
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// Font sizes
+$font-size-xs: 0.75rem;   // 12px
+$font-size-sm: 0.875rem;  // 14px
+$font-size-md: 1rem;      // 16px
+$font-size-lg: 1.125rem;  // 18px
+$font-size-xl: 1.25rem;   // 20px
+$font-size-2xl: 1.5rem;   // 24px
+$font-size-3xl: 1.875rem; // 30px
+$font-size-4xl: 2.25rem;  // 36px
+
+// Line heights
+$line-height-tight: 1.25;
+$line-height-normal: 1.5;
+$line-height-relaxed: 1.75;
+
+// =============================================================================
+// Z-INDEX LAYERS
+// =============================================================================
+$z-index-dropdown: 1000;
+$z-index-sticky: 1020;
+$z-index-fixed: 1030;
+$z-index-modal-backdrop: 1040;
+$z-index-modal: 1050;
+$z-index-popover: 1060;
+$z-index-tooltip: 1070;
+$z-index-toast: 1080;
+
+// =============================================================================
+// COMPONENT SPECIFIC VARIABLES
+// =============================================================================
+
+// Cards
+$card-padding: $spacing-lg;
+$card-border-radius: $border-radius-lg;
+$card-shadow: $shadow-card;
+$card-background: #ffffff;
+
+// Buttons
+$button-border-radius: $border-radius-md;
+$button-padding-x: $spacing-md;
+$button-padding-y: $spacing-sm;
+$button-font-weight: $font-weight-medium;
+
+// Forms
+$input-border-radius: $border-radius-md;
+$input-padding-x: $spacing-md;
+$input-padding-y: $spacing-sm;
+$input-border-color: #e0e0e0;
+$input-focus-border-color: $brand-primary;
+$input-background: #ffffff;
+
+// Tables
+$table-border-color: #f0f0f0;
+$table-header-background: #fafafa;
+$table-row-hover: #f5f5f5;
+$table-cell-padding: $spacing-md;
+
+// Navigation
+$nav-link-color: #666666;
+$nav-link-hover-color: $brand-primary;
+$nav-link-active-color: $brand-primary;
+$nav-background: #ffffff;
+
+// Sidebar
+$sidebar-background: #ffffff;
+$sidebar-border-color: #f0f0f0;
+$sidebar-item-hover: #f5f5f5;
+$sidebar-item-active: $brand-primary;
+
+// =============================================================================
+// ANIMATION DURATIONS
+// =============================================================================
+$duration-fast: 150ms;
+$duration-normal: 300ms;
+$duration-slow: 500ms;
+
+// =============================================================================
+// TRANSITIONS
+// =============================================================================
+$transition-fast: all $duration-fast ease;
+$transition-normal: all $duration-normal ease;
+$transition-slow: all $duration-slow ease;
+$transition-card: box-shadow $duration-normal ease, transform $duration-normal ease;
+$transition-button: background-color $duration-fast ease, color $duration-fast ease;
+$transition-input: border-color $duration-fast ease, box-shadow $duration-fast ease;
+
+// =============================================================================
+// UTILITY MIXINS
+// =============================================================================
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin card-style {
+  background: $card-background;
+  border-radius: $card-border-radius;
+  box-shadow: $card-shadow;
+  padding: $card-padding;
+}
+
+@mixin button-reset {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  outline: none;
+}
+
+// Responsive breakpoints
+@mixin mobile {
+  @media (max-width: #{$mobile-breakpoint - 1px}) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{$mobile-breakpoint}) and (max-width: #{$tablet-breakpoint - 1px}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$tablet-breakpoint}) {
+    @content;
+  }
+}
+
+@mixin large-desktop {
+  @media (min-width: #{$desktop-breakpoint}) {
+    @content;
+  }
+}

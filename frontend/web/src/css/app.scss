@@ -1,0 +1,603 @@
+// =============================================================================
+// APP GLOBAL CSS - Q-PHARMACY SYSTEM
+// =============================================================================
+
+// Import Quasar variables
+@import './quasar.variables.scss';
+
+// Import custom theme variables
+@import './theme-variables.scss';
+
+// Import theme transitions
+@import './theme-transitions.scss';
+
+// =============================================================================
+// UTILITY CLASSES
+// =============================================================================
+
+// Line-clamp utility classes
+// Base line-clamp properties
+%line-clamp-base {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
+
+// Variant classes
+.q-clamp-1 {
+  @extend %line-clamp-base;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+}
+
+.q-clamp-2 {
+  @extend %line-clamp-base;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.q-clamp-3 {
+  @extend %line-clamp-base;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
+.q-clamp-4 {
+  @extend %line-clamp-base;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+}
+
+// =============================================================================
+// THEME SYSTEM - DARK/LIGHT MODE
+// =============================================================================
+
+// CSS Custom Properties for Theme System
+:root {
+  // Light theme colors (default)
+  --theme-bg-primary: #{$gray-50};
+  --theme-bg-secondary: #ffffff;
+  --theme-bg-tertiary: #{$gray-100};
+  --theme-text-primary: #{$gray-900};
+  --theme-text-secondary: #{$gray-700};
+  --theme-text-muted: #{$gray-500};
+  --theme-border: #{$gray-300};
+  --theme-shadow: rgba(0, 0, 0, 0.1);
+  --theme-accent: #{$brand-primary};
+  --theme-success: #{$semantic-success};
+  --theme-warning: #{$semantic-warning};
+  --theme-error: #{$semantic-error};
+  --theme-info: #{$semantic-info};
+}
+
+// Dark theme colors
+body.theme-dark {
+  --theme-bg-primary: #{$gray-900};
+  --theme-bg-secondary: #{$gray-800};
+  --theme-bg-tertiary: #{$gray-700};
+  --theme-text-primary: #{$gray-50};
+  --theme-text-secondary: #{$gray-200};
+  --theme-text-muted: #{$gray-400};
+  --theme-border: #{$gray-600};
+  --theme-shadow: rgba(0, 0, 0, 0.3);
+  --theme-accent: #{$brand-primary};
+  --theme-success: #{$semantic-success};
+  --theme-warning: #{$semantic-warning};
+  --theme-error: #{$semantic-error};
+  --theme-info: #{$semantic-info};
+}
+
+// Theme utility classes
+.theme-bg-primary { background-color: var(--theme-bg-primary); }
+.theme-bg-secondary { background-color: var(--theme-bg-secondary); }
+.theme-bg-tertiary { background-color: var(--theme-bg-tertiary); }
+.theme-text-primary { color: var(--theme-text-primary); }
+.theme-text-secondary { color: var(--theme-text-secondary); }
+.theme-text-muted { color: var(--theme-text-muted); }
+.theme-border { border-color: var(--theme-border); }
+
+// Theme transition classes
+.theme-transition {
+  transition: background-color $transition-normal, color $transition-normal, border-color $transition-normal;
+}
+
+// =============================================================================
+// GLOBAL APP STYLES
+// =============================================================================
+
+// Global app styles
+body {
+  font-family: $font-family-primary;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--theme-bg-primary);
+  color: var(--theme-text-primary);
+  transition: background-color $transition-normal, color $transition-normal;
+}
+
+// Ensure smooth scrolling
+html {
+  scroll-behavior: smooth;
+}
+
+// =============================================================================
+// HEADER & NAVIGATION GLOBAL STYLES
+// =============================================================================
+
+// Modern Header Styles
+.app-header {
+  backdrop-filter: blur(20px);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1000;
+  
+  .app-toolbar {
+    background: linear-gradient(
+      135deg,
+      rgba(37, 99, 235, 0.95) 0%,
+      rgba(13, 148, 136, 0.95) 100%
+    );
+    backdrop-filter: blur(20px);
+    border-radius: 0;
+    box-shadow: 0 4px 32px rgba(37, 99, 235, 0.15);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    &:hover {
+      box-shadow: 0 8px 40px rgba(37, 99, 235, 0.2);
+    }
+    
+    .toolbar-menu-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+      
+      &:active {
+        transform: translateY(0);
+      }
+    }
+    
+    .brand-container {
+      .brand-avatar {
+        background: rgba(255, 255, 255, 0.15);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        
+        &:hover {
+          transform: scale(1.05);
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+      }
+      
+      .brand-text {
+        font-weight: 700;
+        font-size: 1.375rem;
+        background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.8) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        letter-spacing: -0.02em;
+      }
+    }
+    
+    .toolbar-actions {
+      .toolbar-action-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        
+        &:hover {
+          background: rgba(255, 255, 255, 0.2);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+      }
+      
+      .user-avatar {
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        
+        &:hover {
+          transform: scale(1.05);
+          border-color: rgba(255, 255, 255, 0.5);
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+      }
+      
+      .user-name {
+        font-weight: 600;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+}
+
+// Modern Sidebar/Drawer Styles
+.app-drawer {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(249, 250, 251, 0.95) 100%
+  );
+  backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.06);
+  
+  .drawer-header-picture {
+    position: relative;
+    overflow: hidden;
+    
+    .header-bg-image {
+      filter: brightness(0.8) contrast(1.1);
+      transition: all 0.3s ease;
+    }
+    
+    .header-overlay {
+      background: linear-gradient(
+        135deg,
+        rgba(37, 99, 235, 0.8) 0%,
+        rgba(13, 148, 136, 0.6) 100%
+      );
+      backdrop-filter: blur(2px);
+      
+      .brand-avatar {
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        
+        &:hover {
+          transform: scale(1.05);
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        }
+      }
+      
+      .brand-title {
+        font-weight: 700;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        letter-spacing: -0.01em;
+      }
+      
+      .brand-subtitle {
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+        font-weight: 600;
+        opacity: 0.95;
+      }
+    }
+  }
+}
+
+// Enhanced Navigation Menu Styles
+.navigation-menu {
+  .nav-item {
+    margin: 3px 12px;
+    border-radius: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(37, 99, 235, 0.1),
+        transparent
+      );
+      transition: left 0.5s ease;
+    }
+    
+    &:hover {
+      background: linear-gradient(
+        135deg,
+        rgba(37, 99, 235, 0.08) 0%,
+        rgba(13, 148, 136, 0.06) 100%
+      );
+      transform: translateX(4px);
+      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.1);
+      
+      &::before {
+        left: 100%;
+      }
+      
+      .nav-item__icon .q-icon {
+        transform: scale(1.1);
+        color: var(--q-primary);
+      }
+    }
+    
+    &.nav-item--active {
+      background: linear-gradient(
+        135deg,
+        var(--q-primary) 0%,
+        rgba(13, 148, 136, 0.9) 100%
+      );
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.25);
+      transform: translateX(6px);
+      
+      .nav-item__icon .q-icon {
+        transform: scale(1.1);
+      }
+      
+      .nav-item__label {
+        font-weight: 600;
+      }
+    }
+    
+    .nav-item__icon {
+      .q-icon {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        font-size: 22px;
+      }
+    }
+    
+    .nav-item__label {
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+  }
+  
+  .nav-expansion {
+    margin: 3px 12px;
+    border-radius: 12px;
+    overflow: hidden;
+    
+    .nav-expansion-header {
+      background: linear-gradient(
+        135deg,
+        rgba(37, 99, 235, 0.05) 0%,
+        rgba(13, 148, 136, 0.03) 100%
+      );
+      border-radius: 12px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      
+      &:hover {
+        background: linear-gradient(
+          135deg,
+          rgba(37, 99, 235, 0.1) 0%,
+          rgba(13, 148, 136, 0.08) 100%
+        );
+        transform: translateX(2px);
+        box-shadow: 0 2px 12px rgba(37, 99, 235, 0.08);
+      }
+    }
+    
+    .nav-sub-item {
+      margin: 2px 16px 2px 40px;
+      border-radius: 10px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        left: -20px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 3px;
+        height: 0;
+        background: var(--q-primary);
+        border-radius: 2px;
+        transition: height 0.3s ease;
+      }
+      
+      &:hover {
+        background: linear-gradient(
+          135deg,
+          rgba(37, 99, 235, 0.06) 0%,
+          rgba(13, 148, 136, 0.04) 100%
+        );
+        transform: translateX(4px);
+        
+        &::before {
+          height: 20px;
+        }
+        
+        .nav-sub-item__icon .q-icon {
+          transform: scale(1.1);
+          color: var(--q-primary);
+        }
+      }
+      
+      &.nav-sub-item--active {
+        background: linear-gradient(
+          135deg,
+          rgba(37, 99, 235, 0.12) 0%,
+          rgba(13, 148, 136, 0.08) 100%
+        );
+        color: var(--q-primary);
+        font-weight: 600;
+        transform: translateX(6px);
+        box-shadow: 0 2px 12px rgba(37, 99, 235, 0.15);
+        
+        &::before {
+          height: 24px;
+          background: var(--q-primary);
+        }
+        
+        .nav-sub-item__icon .q-icon {
+          transform: scale(1.1);
+        }
+      }
+      
+      .nav-sub-item__icon {
+        .q-icon {
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          font-size: 18px;
+        }
+      }
+      
+      .nav-sub-item__label {
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+    }
+  }
+  
+  .nav-separator {
+    margin: 16px 24px;
+    border-color: rgba(0, 0, 0, 0.08);
+    opacity: 0.6;
+  }
+}
+
+// Enhanced Tooltips
+.q-tooltip {
+  background: linear-gradient(
+    135deg,
+    rgba(37, 99, 235, 0.95) 0%,
+    rgba(13, 148, 136, 0.95) 100%
+  );
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+// User Dropdown Enhancement
+.user-dropdown-menu {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  border-radius: 16px;
+  overflow: hidden;
+  
+  .q-item {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    &:hover {
+      background: linear-gradient(
+        135deg,
+        rgba(37, 99, 235, 0.08) 0%,
+        rgba(13, 148, 136, 0.06) 100%
+      );
+      transform: translateX(4px);
+    }
+  }
+}
+
+// =============================================================================
+// LAYOUT UTILITY CLASSES
+// =============================================================================
+
+// Spacing utilities using theme variables
+.spacing-xs { padding: $spacing-xs; }
+.spacing-sm { padding: $spacing-sm; }
+.spacing-md { padding: $spacing-md; }
+.spacing-lg { padding: $spacing-lg; }
+.spacing-xl { padding: $spacing-xl; }
+
+.margin-xs { margin: $spacing-xs; }
+.margin-sm { margin: $spacing-sm; }
+.margin-md { margin: $spacing-md; }
+.margin-lg { margin: $spacing-lg; }
+.margin-xl { margin: $spacing-xl; }
+
+// Border radius utilities
+.radius-sm { border-radius: $border-radius-sm; }
+.radius-md { border-radius: $border-radius-md; }
+.radius-lg { border-radius: $border-radius-lg; }
+.radius-xl { border-radius: $border-radius-xl; }
+.radius-full { border-radius: $border-radius-full; }
+
+// Shadow utilities
+.shadow-sm { box-shadow: $shadow-sm; }
+.shadow-md { box-shadow: $shadow-md; }
+.shadow-lg { box-shadow: $shadow-lg; }
+.shadow-xl { box-shadow: $shadow-xl; }
+
+// Layout helpers
+.layout-container {
+  max-width: $layout-max-width;
+  margin: 0 auto;
+  padding: 0 $layout-padding;
+}
+
+.layout-section {
+  padding: $layout-section-padding 0;
+}
+
+.layout-card {
+  background: var(--q-surface);
+  border-radius: $border-radius-md;
+  box-shadow: $shadow-md;
+  padding: $spacing-lg;
+  transition: $transition-card;
+}
+
+// Responsive helpers
+.mobile-only {
+  @media (min-width: $breakpoint-sm) {
+    display: none !important;
+  }
+}
+
+.desktop-only {
+  @media (max-width: calc(#{$breakpoint-sm} - 1px)) {
+    display: none !important;
+  }
+}
+
+// Text utilities
+.text-brand { color: $brand-primary; }
+.text-success { color: $semantic-success; }
+.text-warning { color: $semantic-warning; }
+.text-error { color: $semantic-error; }
+.text-info { color: $semantic-info; }
+
+// Background utilities
+.bg-brand { background-color: $brand-primary; }
+.bg-surface { background-color: var(--q-surface); }
+.bg-surface-variant { background-color: var(--q-surface-variant); }
+
+// Custom scrollbar untuk webkit browsers
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+// Dark mode scrollbar
+body.theme-dark {
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+}

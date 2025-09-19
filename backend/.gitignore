@@ -1,0 +1,126 @@
+# ===================================
+# Laravel Backend .gitignore
+# ===================================
+
+# ===== Environment & Configuration =====
+.env
+.env.*
+!.env.example
+!.env.seeder.example
+.phpactor.json
+auth.json
+
+# ===== Dependencies =====
+/vendor
+/node_modules
+composer.phar
+
+# ===== Laravel Framework =====
+# Cache & Storage
+/bootstrap/cache/*
+/storage/app/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
+/storage/logs/*
+/storage/*.key
+/storage/pail
+!storage/app/.gitkeep
+!storage/app/public/.gitkeep
+!storage/framework/.gitkeep
+!storage/framework/cache/.gitkeep
+!storage/framework/sessions/.gitkeep
+!storage/framework/testing/.gitkeep
+!storage/framework/views/.gitkeep
+!storage/logs/.gitkeep
+
+# Public Assets
+/public/build
+/public/hot
+/public/storage
+/public/mix-manifest.json
+
+# ===== Testing =====
+.phpunit.result.cache
+/.phpunit.cache
+/coverage
+phpunit.xml
+!phpunit.xml.dist
+
+# ===== Build & Deployment =====
+/dist
+/build
+*.tar.gz
+*.zip
+
+# ===== IDE & Editor Files =====
+/.idea
+/.vscode
+/.fleet
+/.nova
+/.zed
+*.swp
+*.swo
+*~
+.project
+.buildpath
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# ===== OS Generated Files =====
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ===== Logs =====
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+/storage/logs/*.log
+
+# ===== Temporary Files =====
+*.tmp
+*.temp
+*.cache
+*.pid
+*.seed
+*.pid.lock
+
+# ===== Laravel Specific =====
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+.vagrant/
+.rocketeer/
+
+# ===== Package Managers =====
+package-lock.json
+yarn.lock
+composer.lock
+
+# ===== Database =====
+*.sqlite
+*.sqlite3
+*.db
+
+# ===== Security =====
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# ===== Custom Application Files =====
+# Add any project-specific files here
+/docs/generated
+/public/uploads/*
+!public/uploads/.gitkeep
