@@ -16,19 +16,30 @@
 
 ## 📋 Daftar Isi
 
-- [Tentang Q-Pharmacy](#tentang-q-pharmacy)
-- [Fitur Utama](#fitur-utama)
-- [Teknologi Stack](#teknologi-stack)
-- [Persyaratan Sistem](#persyaratan-sistem)
-- [Instalasi](#instalasi)
-- [Konfigurasi](#konfigurasi)
-- [Penggunaan](#penggunaan)
-- [API Documentation](#api-documentation)
-- [Testing](#testing)
-- [Deployment](#deployment)
-- [Kontribusi](#kontribusi)
-- [Lisensi](#lisensi)
-- [Support](#support)
+- [Tentang Q-Pharmacy](#-tentang-q-pharmacy)
+  - [Tujuan Proyek](#-tujuan-proyek)
+- [Fitur Utama](#-fitur-utama)
+  - [Autentikasi & Otorisasi](#-autentikasi--otorisasi)
+  - [Manajemen Produk](#-manajemen-produk)
+  - [Manajemen Stok](#-manajemen-stok)
+  - [Sistem Penjualan](#-sistem-penjualan)
+  - [Dashboard & Laporan](#-dashboard--laporan)
+  - [User Interface](#-user-interface)
+- [Teknologi Stack](#-teknologi-stack)
+- [Persyaratan Sistem](#-persyaratan-sistem)
+- [Instalasi](#-instalasi)
+- [Konfigurasi](#️-konfigurasi)
+  - [Environment Variables](#environment-variables)
+  - [Frontend Configuration](#frontend-configuration)
+- [Penggunaan](#-penggunaan)
+  - [Default Login Credentials](#default-login-credentials)
+  - [Quick Start Guide](#quick-start-guide)
+- [API Documentation](#-api-documentation)
+- [Testing](#-testing)
+- [Deployment](#-deployment)
+- [Kontribusi](#-kontribusi)
+- [Lisensi](#-lisensi)
+- [Support](#-support)
 
 ## 🏥 Tentang Q-Pharmacy
 
@@ -130,7 +141,7 @@ Q-Pharmacy adalah sistem manajemen apotek modern yang dirancang untuk membantu a
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/your-username/q-pharmacy.git
+git clone https://github.com/edopranata/q-pharmacy.git
 cd q-pharmacy
 ```
 
@@ -308,7 +319,7 @@ Untuk detail lengkap, lihat [Testing Strategy](docs/TESTING.md)
 2. **Application Deployment**
    ```bash
    # Clone and setup
-   git clone https://github.com/your-username/q-pharmacy.git
+   git clone https://github.com/edopranata/q-pharmacy.git
    cd q-pharmacy
    
    # Backend
@@ -366,8 +377,8 @@ Proyek ini dilisensikan di bawah [MIT License](LICENSE).
 
 ### Community
 
-- **Issues**: [GitHub Issues](https://github.com/your-username/q-pharmacy/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/your-username/q-pharmacy/discussions)
+- **Issues**: [GitHub Issues](https://github.com/edopranata/q-pharmacy/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/edopranata/q-pharmacy/discussions)
 - **Email**: support@q-pharmacy.com
 
 ### Commercial Support
