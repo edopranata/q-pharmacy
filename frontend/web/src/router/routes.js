@@ -447,6 +447,40 @@ const routes = [
                 { label: 'Role & Permission' }
               ]
             }
+          },
+          {
+            path: 'permissions',
+            name: 'app.management.permissions.index',
+            component: () => import('pages/management/PermissionDisplayPage.vue'),
+            meta: {
+              requiresAuth: true,
+              permission: 'app.management.roles.index',
+              title: 'Daftar Permission - Q-Pharmacy',
+              breadcrumb: [
+                { label: 'Manajemen User' },
+                { label: 'Daftar Permission' }
+              ]
+            }
+          }
+        ]
+      },
+
+      // Demo pages for development
+      {
+        path: 'demo',
+        children: [
+          {
+            path: 'stats-card',
+            name: 'app.demo.stats-card',
+            component: () => import('pages/demo/StatsCardDemo.vue'),
+            meta: {
+              requiresAuth: true,
+              title: 'StatsCard Demo - Q-Pharmacy',
+              breadcrumb: [
+                { label: 'Demo' },
+                { label: 'StatsCard' }
+              ]
+            }
           }
         ]
       }

@@ -233,6 +233,59 @@ $inventory-expired: $negative;
 $inventory-near-expiry: $warning;
 
 // =============================================================================
+// COMPONENT VARIABLES
+// =============================================================================
+
+// Card Variables
+:root {
+  // Card styling
+  --card-border-radius: #{$border-radius-lg};
+  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --card-hover-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --card-elevated-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --card-elevated-hover-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+  --card-transition: all 0.2s ease-in-out;
+  --card-hover-transform: translateY(-2px);
+  
+  // Product card specific
+  --product-card-transition: transform 0.2s ease-in-out;
+  --product-card-hover-transform: scale(1.02);
+  
+  // Permission card specific
+  --permission-card-transition: all 0.3s ease;
+  --permission-card-hover-transform: translateY(-4px);
+  --permission-card-success-shadow: 0 8px 25px rgba(5, 150, 105, 0.15);
+  --permission-card-neutral-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  
+  // Table styling
+  --table-border-radius: #{$border-radius-md};
+  --table-elevated-shadow: 0 1px 5px rgba(0, 0, 0, 0.2), 0 2px 2px rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12);
+  --table-pharmacy-shadow: 0 2px 8px rgba(13, 148, 136, 0.15);
+  
+  // Interactive elements
+  --interactive-transition: all 0.2s ease-in-out;
+  --interactive-hover-transform: translateY(-2px);
+  --interactive-scale-transform: scale(1.05);
+  --interactive-lift-transform: translateY(-4px);
+  --interactive-lift-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  
+  // Typography
+  --font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+}
+
+// Dark theme adjustments
+body.theme-dark {
+  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --card-hover-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
+  --card-elevated-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
+  --card-elevated-hover-shadow: 0 10px 15px rgba(0, 0, 0, 0.4), 0 4px 6px rgba(0, 0, 0, 0.3);
+  --table-elevated-shadow: 0 1px 5px rgba(0, 0, 0, 0.4), 0 2px 2px rgba(0, 0, 0, 0.3), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+  --permission-card-success-shadow: 0 8px 25px rgba(5, 150, 105, 0.25);
+  --permission-card-neutral-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  --interactive-lift-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+// =============================================================================
 // QUASAR FRAMEWORK OVERRIDES
 // =============================================================================
 

@@ -91,18 +91,32 @@ const computedColor = computed(() => {
 })
 
 const buttonClasses = computed(() => {
-  const classes = ['auth-button']
+  const classes = ['btn']
   
-  if (props.fullWidth) {
-    classes.push('auth-button--full-width')
+  // Add size class
+  classes.push(`btn-${props.size}`)
+  
+  // Add variant class
+  if (props.variant === 'outline') {
+    classes.push(`btn-outline-${props.color}`)
+  } else if (props.variant === 'ghost') {
+    classes.push(`btn-ghost-${props.color}`)
+  } else {
+    classes.push(`btn-${props.color}`)
   }
   
+  // Add shape classes
   if (props.rounded) {
-    classes.push('auth-button--rounded')
+    classes.push('btn-pill')
   }
   
-  classes.push(`auth-button--${props.variant}`)
-  classes.push(`auth-button--${props.size}`)
+  // Add width class
+  if (props.fullWidth) {
+    classes.push('btn-block')
+  }
+  
+  // Add hover effects
+  classes.push('hover-lift')
   
   return classes.join(' ')
 })
@@ -116,222 +130,6 @@ const handleClick = (evt) => {
 </script>
 
 <style lang="scss" scoped>
-.auth-button {
-  font-family: var(--font-family-primary);
-  font-weight: var(--font-weight-semibold);
-  border-radius: var(--border-radius-md);
-  transition: var(--transition-normal);
-  position: relative;
-  overflow: hidden;
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: var(--transition-normal);
-  }
-  
-  &:hover::before {
-    left: 100%;
-  }
-  
-  &:hover:not(.q-btn--disable) {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
-  }
-  
-  &:active:not(.q-btn--disable) {
-    transform: translateY(0);
-  }
-}
-
-// Full width variant
-.auth-button--full-width {
-  width: 100%;
-}
-
-// Rounded variant
-.auth-button--rounded {
-  border-radius: var(--border-radius-xl);
-}
-
-// Size variants
-.auth-button--xs {
-  height: 32px;
-  font-size: var(--font-size-xs);
-  padding: var(--spacing-xs) var(--spacing-sm);
-}
-
-.auth-button--sm {
-  height: 36px;
-  font-size: var(--font-size-sm);
-  padding: var(--spacing-sm) var(--spacing-md);
-}
-
-.auth-button--md {
-  height: 40px;
-  font-size: var(--font-size-base);
-  padding: var(--spacing-sm) var(--spacing-lg);
-}
-
-.auth-button--lg {
-  height: 48px;
-  font-size: var(--font-size-base);
-  padding: var(--spacing-md) var(--spacing-xl);
-}
-
-.auth-button--xl {
-  height: 56px;
-  font-size: var(--font-size-lg);
-  padding: var(--spacing-lg) var(--spacing-2xl);
-}
-
-// Variant styles
-.auth-button--filled {
-  background: linear-gradient(135deg, var(--auth-primary) 0%, var(--auth-secondary) 100%);
-  border: none;
-  box-shadow: var(--shadow-md);
-  
-  &:hover:not(.q-btn--disable) {
-    background: linear-gradient(135deg, var(--auth-secondary) 0%, var(--auth-primary) 100%);
-  }
-}
-
-.auth-button--outline {
-  border: 2px solid var(--auth-primary);
-  background: transparent;
-  color: var(--auth-primary);
-  
-  &:hover:not(.q-btn--disable) {
-    background: var(--auth-primary);
-    color: white;
-  }
-}
-
-.auth-button--flat {
-  background: transparent;
-  box-shadow: none;
-  
-  &:hover:not(.q-btn--disable) {
-    background: rgba(var(--auth-primary-rgb), 0.1);
-    transform: none;
-    box-shadow: none;
-  }
-}
-
-// Loading state
-.auth-button.q-btn--loading {
-  pointer-events: none;
-  
-  :deep(.q-btn__content) {
-    opacity: 0.6;
-  }
-}
-
-// Disabled state
-.auth-button.q-btn--disable {
-  opacity: 0.5;
-  cursor: not-allowed;
-  
-  &:hover {
-    transform: none;
-    box-shadow: none;
-  }
-}
-
-// Focus state for accessibility
-.auth-button:focus-visible {
-  outline: 2px solid var(--auth-accent);
-  outline-offset: 2px;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .auth-button--xs {
-    height: 36px;
-    font-size: var(--font-size-sm);
-  }
-  
-  .auth-button--sm {
-    height: 40px;
-    font-size: var(--font-size-base);
-  }
-  
-  .auth-button--md {
-    height: 44px;
-    font-size: var(--font-size-base);
-  }
-  
-  .auth-button--lg {
-    height: 48px;
-    font-size: var(--font-size-base);
-    min-height: 44px; /* Touch-friendly minimum */
-  }
-  
-  .auth-button--xl {
-    height: 52px;
-    font-size: var(--font-size-lg);
-  }
-}
-
-@media (max-width: 480px) {
-  .auth-button {
-    min-height: 48px; /* Larger touch targets on mobile */
-    
-    &--lg {
-      height: 52px;
-      font-size: var(--font-size-base);
-    }
-    
-    &--xl {
-      height: 56px;
-      font-size: var(--font-size-base);
-    }
-  }
-}
-
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-  .auth-button {
-    &--outline {
-      border-width: 3px;
-    }
-    
-    &:focus-visible {
-      outline-width: 3px;
-    }
-  }
-}
-
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-  .auth-button {
-    transition: none;
-    
-    &::before {
-      transition: none;
-    }
-    
-    &:hover:not(.q-btn--disable) {
-      transform: none;
-    }
-    
-    &:active:not(.q-btn--disable) {
-      transform: none;
-    }
-  }
-}
-
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  .auth-button {
-    &--flat:hover:not(.q-btn--disable) {
-      background: rgba(255, 255, 255, 0.1);
-    }
-  }
-}
+// Component-specific styles only
+// Global button styles are now handled by global classes
 </style>

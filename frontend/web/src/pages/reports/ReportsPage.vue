@@ -10,7 +10,7 @@
     <!-- Report Categories -->
     <div class="row q-gutter-md q-mb-lg">
       <div class="col-12 col-md-6 col-lg-3">
-        <q-card class="cursor-pointer" @click="navigateToReport('sales')">
+        <q-card class="interactive-hover" @click="navigateToReport('sales')">
           <q-card-section class="text-center">
             <q-icon name="trending_up" size="3rem" color="primary" />
             <div class="text-h6 q-mt-md">Sales Reports</div>
@@ -19,7 +19,7 @@
         </q-card>
       </div>
       <div class="col-12 col-md-6 col-lg-3">
-        <q-card class="cursor-pointer" @click="navigateToReport('inventory')">
+        <q-card class="interactive-hover" @click="navigateToReport('inventory')">
           <q-card-section class="text-center">
             <q-icon name="inventory" size="3rem" color="secondary" />
             <div class="text-h6 q-mt-md">Inventory Reports</div>
@@ -28,7 +28,7 @@
         </q-card>
       </div>
       <div class="col-12 col-md-6 col-lg-3">
-        <q-card class="cursor-pointer" @click="navigateToReport('financial')">
+        <q-card class="interactive-hover" @click="navigateToReport('financial')">
           <q-card-section class="text-center">
             <q-icon name="account_balance" size="3rem" color="positive" />
             <div class="text-h6 q-mt-md">Financial Reports</div>
@@ -37,7 +37,7 @@
         </q-card>
       </div>
       <div class="col-12 col-md-6 col-lg-3">
-        <q-card class="cursor-pointer" @click="navigateToReport('products')">
+        <q-card class="interactive-hover" @click="navigateToReport('products')">
           <q-card-section class="text-center">
             <q-icon name="medication" size="3rem" color="warning" />
             <div class="text-h6 q-mt-md">Product Reports</div>
@@ -536,14 +536,3 @@ onMounted(() => {
   loadReports()
 })
 </script>
-
-<style scoped>
-.cursor-pointer {
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.cursor-pointer:hover {
-  transform: translateY(-2px);
-}
-</style>

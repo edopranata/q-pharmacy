@@ -339,14 +339,7 @@ const handleAvatarUpload = async (event) => {
     }
     
   } catch (error) {
-    // Only show notification if auth store didn't handle it
-    if (!error.response) {
-      Notify.create({
-        type: 'negative',
-        message: error.message || 'Gagal mengupload avatar',
-        position: 'top'
-      })
-    }
+    console.error('Error uploading avatar:', error)
   } finally {
     avatarLoading.value = false
     // Reset file input
@@ -372,14 +365,7 @@ const deleteAvatar = async () => {
     }
     
   } catch (error) {
-    // Only show notification if auth store didn't handle it
-    if (!error.response) {
-      Notify.create({
-        type: 'negative',
-        message: error.message || 'Gagal menghapus avatar',
-        position: 'top'
-      })
-    }
+    console.error('Error deleting avatar:', error)
   } finally {
     avatarLoading.value = false
     showDeleteAvatarDialog.value = false

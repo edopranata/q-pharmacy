@@ -1,5 +1,5 @@
 <template>
-  <div class="form-group">
+  <div class="input-group">
     <q-input
       v-model="inputValue"
       :type="computedType"
@@ -9,7 +9,7 @@
       :disable="disable"
       outlined
       dense
-      class="auth-input"
+      :class="inputClasses"
       :error="hasError"
       :error-message="errorMessage"
       @blur="handleBlur"
@@ -110,6 +110,24 @@ const inputValue = computed({
   set: (value) => emit('update:modelValue', value)
 })
 
+const inputClasses = computed(() => {
+  const classes = ['input', 'input-md', 'input-outlined']
+  
+  if (hasError.value) {
+    classes.push('input-error')
+  }
+  
+  if (isFocused.value) {
+    classes.push('input-focused')
+  }
+  
+  if (props.disable) {
+    classes.push('input-disabled')
+  }
+  
+  return classes.join(' ')
+})
+
 const validationRules = computed(() => {
   const rules = [...props.rules]
   
@@ -184,145 +202,15 @@ watch(inputValue, (newValue) => {
 </script>
 
 <style lang="scss" scoped>
-.form-group {
+// Component-specific styles only
+// Global input styles are now handled by global classes
+
+.input-group {
   margin-bottom: var(--spacing-md);
 }
 
-.auth-input {
-  width: 100%;
-  transition: var(--transition-normal);
-  
-  :deep(.q-field__control) {
-    border-radius: var(--border-radius-md);
-    background: var(--auth-surface);
-    backdrop-filter: blur(10px);
-    font-family: var(--font-family-primary);
-    transition: var(--transition-normal);
-  }
-  
-  :deep(.q-field__outlined .q-field__control:before) {
-    border-color: var(--auth-border);
-    transition: var(--transition-fast);
-  }
-  
-  :deep(.q-field__outlined .q-field__control:hover:before) {
-    border-color: var(--auth-primary);
-  }
-  
-  :deep(.q-field__outlined.q-field--focused .q-field__control:before) {
-    border-color: var(--auth-primary);
-    border-width: 2px;
-  }
-  
-  :deep(.q-field__outlined.q-field--error .q-field__control:before) {
-    border-color: var(--q-negative);
-  }
-  
-  :deep(.q-field__input) {
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-normal);
-  }
-  
-  :deep(.q-field__label) {
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    color: var(--auth-text-secondary);
-  }
-  
-  :deep(.q-field__bottom) {
-    font-size: var(--font-size-xs);
-    padding-top: var(--spacing-xs);
-  }
-}
-
-// Focus state enhancement
-.auth-input:focus-within {
-  transform: translateY(-1px);
-  
-  :deep(.q-field__control) {
-    box-shadow: var(--shadow-md);
-  }
-}
-
-// Error state
-.auth-input.q-field--error {
-  :deep(.q-field__control) {
-    background: rgba(244, 67, 54, 0.05);
-  }
-}
-
-// Disabled state
-.auth-input.q-field--disabled {
-  opacity: 0.6;
-  
-  :deep(.q-field__control) {
-    background: rgba(0, 0, 0, 0.05);
-  }
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .auth-input {
-    :deep(.q-field__input) {
-      font-size: var(--font-size-sm);
-    }
-    
-    :deep(.q-field__label) {
-      font-size: var(--font-size-xs);
-    }
-    
-    :deep(.q-field__control) {
-      min-height: 44px; /* Touch-friendly size */
-    }
-  }
-}
-
-@media (max-width: 480px) {
-  .form-group {
-    margin-bottom: var(--spacing-sm);
-  }
-  
-  .auth-input {
-    :deep(.q-field__control) {
-      min-height: 48px; /* Larger touch target */
-    }
-    
-    :deep(.q-field__bottom) {
-      font-size: var(--font-size-xs);
-      padding-top: var(--spacing-xs);
-    }
-  }
-}
-
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-  .auth-input {
-    :deep(.q-field__outlined .q-field__control:before) {
-      border-width: 2px;
-    }
-    
-    :deep(.q-field__outlined.q-field--focused .q-field__control:before) {
-      border-width: 3px;
-    }
-  }
-}
-
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-  .auth-input {
-    transition: none;
-    
-    :deep(.q-field__control) {
-      transition: none;
-    }
-    
-    :deep(.q-field__outlined .q-field__control:before) {
-      transition: none;
-    }
-  }
-  
-  .auth-input:focus-within {
-    transform: none;
-  }
+// Quasar-specific overrides for better integration
+:deep(.q-field__control) {
+  backdrop-filter: blur(10px);
 }
 </style>

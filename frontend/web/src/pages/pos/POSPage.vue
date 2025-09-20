@@ -353,13 +353,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.product-card {
-  transition: transform 0.2s;
-}
-
-.product-card:hover {
-  transform: scale(1.02);
-}
-</style>

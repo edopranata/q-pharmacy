@@ -50,19 +50,44 @@ class UserController extends Controller
         // Sorting
         $sortBy = $request->get('sort_by', 'name');
         $sortOrder = $request->get('sort_order', 'asc');
-        $allowedSortFields = ['name', 'email', 'created_at', 'last_login'];
+        $allowedSortFields = ['name', 'email', 'created_at', 'last_login', 'last_activity', 'status'];
+        
+        // Map 'status' to 'email_verified_at' for sorting
+        $actualSortField = $sortBy === 'status' ? 'email_verified_at' : $sortBy;
         
         if (in_array($sortBy, $allowedSortFields)) {
-            $query->orderBy($sortBy, $sortOrder);
+            $query->orderBy($actualSortField, $sortOrder);
         } else {
             $query->orderBy('name', 'asc');
         }
 
         $users = $query->paginate($request->get('per_page', 15));
 
+        // Prepare additional meta information
+        $additionalMeta = [
+            'sorting' => [
+                'sort_by' => $sortBy,
+                'sort_order' => $sortOrder
+            ],
+            'filters_applied' => []
+        ];
+
+        // Add applied filters to meta
+        if ($request->has('search') && !empty($request->search)) {
+            $additionalMeta['filters_applied']['search'] = $request->search;
+        }
+        if ($request->has('role') && !empty($request->role)) {
+            $additionalMeta['filters_applied']['role'] = $request->role;
+        }
+        if ($request->has('status') && $request->status !== '') {
+            $additionalMeta['filters_applied']['status'] = $request->status;
+        }
+
         return BaseResponseService::paginated(
             $users,
-            'Users retrieved successfully'
+            'Users retrieved successfully',
+            null,
+            $additionalMeta
         );
     }
 
@@ -74,11 +99,12 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
+            'password' => 'required|string|min:8|confirmed',
             'avatar' => 'nullable|string|url|max:500',
             'phone' => 'nullable|string|max:20',
             'bio' => 'nullable|string|max:1000',
             'location' => 'nullable|string|max:255',
+            'status' => 'nullable|string|in:Active,Inactive',
             'roles' => 'array',
             'roles.*' => 'exists:roles,name'
         ]);
@@ -91,9 +117,13 @@ class UserController extends Controller
             $userData = $validator->validated();
             $userData['password'] = Hash::make($userData['password']);
             
-            // Remove roles from user data before creating user
+            // Handle status field - set email_verified_at based on status
+            $status = $userData['status'] ?? 'Active';
+            $userData['email_verified_at'] = $status === 'Active' ? now() : null;
+            
+            // Remove roles and status from user data before creating user
             $roles = $userData['roles'] ?? [];
-            unset($userData['roles']);
+            unset($userData['roles'], $userData['status']);
             
             $user = User::create($userData);
             
@@ -153,6 +183,7 @@ class UserController extends Controller
             'phone' => 'sometimes|nullable|string|max:20',
             'bio' => 'sometimes|nullable|string|max:1000',
             'location' => 'sometimes|nullable|string|max:255',
+            'status' => 'sometimes|string|in:Active,Inactive',
             'roles' => 'sometimes|array',
             'roles.*' => 'exists:roles,name'
         ]);
@@ -167,6 +198,12 @@ class UserController extends Controller
             // Hash password if provided
             if (isset($userData['password'])) {
                 $userData['password'] = Hash::make($userData['password']);
+            }
+            
+            // Handle status field - set email_verified_at based on status
+            if (isset($userData['status'])) {
+                $userData['email_verified_at'] = $userData['status'] === 'Active' ? now() : null;
+                unset($userData['status']);
             }
             
             // Handle roles separately
@@ -287,8 +324,19 @@ class UserController extends Controller
     public function stats()
     {
         try {
+            // Total users count
             $totalUsers = User::count();
+            
+            // Active users (email verified)
             $activeUsers = User::whereNotNull('email_verified_at')->count();
+            
+            // Users who logged in today based on last_activity
+            $todayLogin = User::whereDate('last_activity', today())->count();
+            
+            // Total roles count
+            $rolesCount = Role::count();
+            
+            // Additional statistics for backward compatibility
             $adminUsers = User::whereHas('roles', function ($query) {
                 $query->whereIn('name', ['super-admin', 'admin']);
             })->count();
@@ -297,6 +345,13 @@ class UserController extends Controller
             })->count();
             
             $stats = [
+                // New required statistics
+                'total_user' => $totalUsers,
+                'active_user' => $activeUsers,
+                'today_login' => $todayLogin,
+                'roles_count' => $rolesCount,
+                
+                // Existing statistics for backward compatibility
                 'total_users' => $totalUsers,
                 'active_users' => $activeUsers,
                 'admin_users' => $adminUsers,
@@ -367,19 +422,11 @@ class UserController extends Controller
     public function toggleStatus(User $user)
     {
         try {
-            // Only allow toggling for unverified users
-            if ($user->email_verified_at !== null) {
-                return BaseResponseService::error(
-                    'Cannot modify status of verified users',
-                    403
-                );
-            }
-
             // Toggle verification status
             $user->email_verified_at = $user->email_verified_at ? null : now();
             $user->save();
 
-            $status = $user->email_verified_at ? 'verified' : 'unverified';
+            $status = $user->email_verified_at ? 'Active' : 'Inactive';
             
             return BaseResponseService::success(
                 [
@@ -395,4 +442,5 @@ class UserController extends Controller
             );
         }
     }
+
 }

@@ -4,25 +4,25 @@
 
 API Q-Pharmacy adalah RESTful API yang dibangun dengan Laravel 12 dan menggunakan Laravel Sanctum untuk autentikasi. API ini menyediakan endpoint untuk manajemen apotek lengkap termasuk produk, stok, penjualan, dan sistem role-based access control dengan dukungan penuh untuk pagination, search, filter, dan sorting.
 
-**Current Status**: Foundation APIs Complete  
-**Last Updated**: 20 September 2025  
-**Version**: 0.4.0
+**Current Status**: User Management Phase Complete  
+**Last Updated**: 15 Januari 2025  
+**Version**: 0.5.0
 
 ### 🎯 Implementation Status
 
 #### ✅ Implemented APIs
 - **Authentication**: Login, Register, Logout, Password Reset
 - **Master Data**: Categories, Suppliers, Units (full CRUD dengan pagination, search, filter, sort)
-- **User Management**: Basic user operations (in development)
+- **User Management**: Complete CRUD dengan advanced features, profile management, avatar upload/delete
+- **Role Management**: Role assignment dan permission management
 - **Audit System**: Activity logging dan audit trails
 
 #### 🔄 In Development
-- **User Management**: Complete CRUD dengan advanced features
-- **Role Management**: Role assignment dan permission management
+- **Product Management**: Product CRUD dengan barcode support
+- **Inventory Management**: Basic stock tracking
 
 #### ⏳ Planned APIs
-- **Product Management**: Product CRUD dengan barcode support
-- **Inventory Management**: Stock tracking dan batch management
+- **Inventory Management**: Advanced stock tracking dan batch management
 - **Point of Sale**: Transaction processing APIs
 - **Reporting**: Analytics dan reporting endpoints
 

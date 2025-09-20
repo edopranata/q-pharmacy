@@ -68,6 +68,7 @@
 
     <!-- Data Table -->
     <q-table
+      class="table-elevated"
       ref="supplierTable"
       :rows="suppliers"
       :columns="columns"
@@ -326,7 +327,7 @@
 <script setup>
 import { ref, reactive, onMounted, computed, watch } from 'vue'
 import { useSupplierStore } from 'src/stores/supplier'
-import { Notify, Dialog } from 'quasar'
+import { Dialog } from 'quasar'
 
 // Reactive data
 const supplierStore = useSupplierStore()
@@ -370,13 +371,16 @@ const supplierForm = reactive({
 
 // Menggunakan pagination dari store dengan fallback untuk UI
 const pagination = computed({
-  get: () => ({
-    sortBy: supplierStore.pagination.sortBy,
-    descending: supplierStore.pagination.descending,
-    page: supplierStore.pagination.page,
-    rowsPerPage: supplierStore.pagination.rowsPerPage,
-    rowsNumber: supplierStore.pagination.rowsNumber
-  }),
+  get: () => {
+    const storePagination = supplierStore.pagination
+    return {
+      sortBy: storePagination.sortBy,
+      descending: storePagination.descending,
+      page: storePagination.page,
+      rowsPerPage: storePagination.rowsPerPage,
+      rowsNumber: storePagination.rowsNumber
+    }
+  },
   set: (val) => {
     supplierStore.setPagination(val)
   }
@@ -474,10 +478,7 @@ const loadSuppliers = async (props = {}) => {
 
     await supplierStore.fetchSuppliers(params)
   } catch (error) {
-    Notify.create({
-      type: 'negative',
-      message: error.message || 'Gagal memuat data supplier'
-    })
+    console.error('Error loading suppliers:', error)
   }
 }
 
@@ -521,26 +522,15 @@ const saveSupplier = async () => {
     
     if (editMode.value) {
       await supplierStore.updateSupplier(supplierForm.id, data)
-      Notify.create({
-        type: 'positive',
-        message: 'Supplier berhasil diperbarui'
-      })
     } else {
       await supplierStore.createSupplier(data)
-      Notify.create({
-        type: 'positive',
-        message: 'Supplier berhasil ditambahkan'
-      })
     }
 
     // Refresh data setelah save
     loadSuppliers()
     closeDialog()
   } catch (error) {
-    Notify.create({
-      type: 'negative',
-      message: error.message || 'Gagal menyimpan supplier'
-    })
+    console.error('Error saving supplier:', error)
   } finally {
     saving.value = false
   }
@@ -560,17 +550,9 @@ const deleteSupplier = (supplier) => {
   }).onOk(async () => {
     try {
       await supplierStore.deleteSupplier(supplier.id)
-      Notify.create({
-        type: 'positive',
-        message: 'Supplier deleted successfully'
-      })
-
       loadSuppliers()
     } catch (error) {
-      Notify.create({
-        type: 'negative',
-        message: error.message || 'Failed to delete supplier'
-      })
+      console.error('Error deleting supplier:', error)
     }
   })
 }
@@ -597,9 +579,3 @@ onMounted(() => {
   loadSuppliers()
 })
 </script>
-
-<style scoped>
-.q-table {
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2), 0 2px 2px rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12);
-}
-</style>

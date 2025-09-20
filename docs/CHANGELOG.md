@@ -17,10 +17,45 @@ dan proyek ini mengikuti [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 - Advanced reporting dan analytics
 
 ### In Development
-- User management system dengan CRUD lengkap
-- Role management dengan permission assignment
-- Enhanced user activity monitoring
-- Bulk operations untuk user management
+- Manajemen produk obat dengan barcode support
+- Sistem inventory tracking dengan batch management
+- Product search dan filtering capabilities
+- Basic POS interface foundation
+
+## [0.5.0] - 2025-01-15
+
+### Added
+- **User & Role Management System**
+  - Users CRUD dengan server-side pagination, search, filter, sort, order
+  - Roles management dengan permission assignment
+  - Enhanced user activity monitoring dan audit logging
+  - User profile management dengan avatar upload/delete
+  - Permission management UI components
+  - Advanced user profile features
+
+- **System Optimizations**
+  - Notification system optimization (removed duplicate notifications)
+  - Improved error handling dan debugging
+  - Enhanced API security dan validation
+  - Better user experience dengan consistent notifications
+
+- **Frontend Enhancements**
+  - User management interface dengan advanced features
+  - Role management interface dengan permission assignment
+  - Avatar management dengan upload/delete functionality
+  - Optimized notification system across all components
+
+### Changed
+- Centralized notification handling di stores
+- Improved user profile management
+- Enhanced role-based access control
+- Better error logging untuk debugging
+
+### Fixed
+- Duplicate notifications di semua management pages
+- User profile update issues
+- Avatar upload/delete functionality
+- Permission assignment bugs
 
 ## [0.4.0] - 2025-09-20
 

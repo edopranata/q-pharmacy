@@ -130,13 +130,12 @@ class UserService {
   }
 
   /**
-   * Toggle user status (active/inactive)
+   * Toggle user status
    * @param {number} userId - User ID
-   * @param {boolean} status - New status
    * @returns {Promise} API response
    */
-  async toggleStatus(userId, status) {
-    return await apiService.patch(`${ApiEndpoints.USERS}/${userId}/status`, { status })
+  async toggleStatus(userId) {
+    return await apiService.patch(`${ApiEndpoints.USERS}/${userId}/status`)
   }
 
   /**
@@ -187,10 +186,13 @@ class UserService {
 
   /**
    * Get available roles for assignment
+   * @param {Object} params - Query parameters
+   * @param {string} params.search - Search term
+   * @param {number} params.limit - Limit number of results
    * @returns {Promise} API response
    */
-  async getAvailableRoles() {
-    return await apiService.get(ApiEndpoints.ROLE_OPTIONS)
+  async getAvailableRoles(params = {}) {
+    return await apiService.get(ApiEndpoints.ROLE_OPTIONS, params)
   }
 
   /**

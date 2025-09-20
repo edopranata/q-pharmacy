@@ -348,13 +348,16 @@ const statusOptions = [
 
     // Menggunakan pagination dari store dengan fallback untuk UI
     const pagination = computed({
-      get: () => ({
-        sortBy: productStore.pagination.sortBy,
-        descending: productStore.pagination.descending,
-        page: productStore.pagination.page,
-        rowsPerPage: productStore.pagination.rowsPerPage,
-        rowsNumber: productStore.pagination.rowsNumber
-      }),
+      get: () => {
+        const storePagination = productStore.pagination
+        return {
+          sortBy: storePagination.sortBy,
+          descending: storePagination.descending,
+          page: storePagination.page,
+          rowsPerPage: storePagination.rowsPerPage,
+          rowsNumber: storePagination.rowsNumber
+        }
+      },
       set: (val) => {
         productStore.setPagination(val)
       }

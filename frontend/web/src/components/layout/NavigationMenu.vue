@@ -390,6 +390,22 @@
           <q-item-label class="nav-sub-item__label">Role & Permission</q-item-label>
         </q-item-section>
       </q-item>
+
+      <q-item 
+        clickable 
+        v-ripple 
+        :to="'/app/management/permissions'" 
+        :inset-level="0.5"
+        class="nav-sub-item"
+        active-class="nav-sub-item--active"
+      >
+        <q-item-section avatar class="nav-sub-item__icon">
+          <q-icon name="security" />
+        </q-item-section>
+        <q-item-section class="nav-sub-item__content">
+          <q-item-label class="nav-sub-item__label">Daftar Permission</q-item-label>
+        </q-item-section>
+      </q-item>
     </q-expansion-item>
 
     <q-separator />

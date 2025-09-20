@@ -10,7 +10,7 @@
     <div class="row q-gutter-md">
       <!-- Master Data Section -->
       <div class="col-12 col-md-6 col-lg-4">
-        <q-card class="cursor-pointer" @click="$router.push('/app/master/categories')">
+        <q-card class="interactive-hover" @click="$router.push('/app/master/categories')">
           <q-card-section>
             <div class="row items-center">
               <div class="col">
@@ -27,7 +27,7 @@
 
       <!-- Inventory Section -->
       <div class="col-12 col-md-6 col-lg-4">
-        <q-card class="cursor-pointer" @click="$router.push('/app/products')">
+        <q-card class="interactive-hover" @click="$router.push('/app/products')">
           <q-card-section>
             <div class="row items-center">
               <div class="col">
@@ -44,7 +44,7 @@
 
       <!-- Reports Section -->
       <div class="col-12 col-md-6 col-lg-4">
-        <q-card class="cursor-pointer">
+        <q-card class="interactive-hover">
           <q-card-section>
             <div class="row items-center">
               <div class="col">

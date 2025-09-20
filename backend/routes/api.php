@@ -147,6 +147,15 @@ Route::middleware(['auth:sanctum'])->prefix('app')->group(function () {
     });
     
     // Role Management
+    Route::prefix('management/roles')->group(function () {
+        // Role statistics (accessible to all authenticated users)
+        Route::get('/stats', [RoleController::class, 'stats'])->name('app.management.roles.stats');
+        
+        // Available permissions for role assignment (accessible to all authenticated users)
+        Route::get('/available/permissions', [RoleController::class, 'availablePermissions'])
+            ->name('app.management.roles.available-permissions');
+    });
+    
     Route::prefix('management/roles')->middleware(['permission:app.management.roles.index'])->group(function () {
         Route::get('/', [RoleController::class, 'index'])->name('app.management.roles.index');
         Route::post('/', [RoleController::class, 'store'])->middleware(['permission:app.management.roles.store'])->name('app.management.roles.store');
@@ -158,9 +167,6 @@ Route::middleware(['auth:sanctum'])->prefix('app')->group(function () {
         Route::get('/{role}/permissions', [RoleController::class, 'permissions'])->name('app.management.roles.permissions');
         Route::post('/{role}/permissions', [RoleController::class, 'assignPermissions'])->middleware(['permission:app.management.roles.assign-permissions'])->name('app.management.roles.assign-permissions');
         Route::get('/{role}/users', [RoleController::class, 'users'])->name('app.management.roles.users');
-        
-        // Available permissions for role assignment
-        Route::get('/available/permissions', [RoleController::class, 'availablePermissions'])->name('app.management.roles.available-permissions');
     });
 });
 

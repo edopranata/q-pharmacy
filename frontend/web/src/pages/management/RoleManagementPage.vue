@@ -16,89 +16,67 @@
       </div>
     </div>
 
-    <!-- Role Statistics -->
-    <div class="row q-col-gutter-md q-mb-lg">
-      <div class="col-12 col-md-3">
-        <q-card class="bg-primary text-white">
-          <q-card-section>
-            <div class="text-h6">Total Roles</div>
-            <div class="text-h4">{{ totalRoles }}</div>
-            <div class="text-caption">Roles dalam sistem</div>
-          </q-card-section>
-        </q-card>
-      </div>
-      <div class="col-12 col-md-3">
-        <q-card class="bg-secondary text-white">
-          <q-card-section>
-            <div class="text-h6">Active Roles</div>
-            <div class="text-h4">{{ activeRoles }}</div>
-            <div class="text-caption">Roles yang digunakan</div>
-          </q-card-section>
-        </q-card>
-      </div>
-      <div class="col-12 col-md-3">
-        <q-card class="bg-positive text-white">
-          <q-card-section>
-            <div class="text-h6">Total Permissions</div>
-            <div class="text-h4">{{ totalPermissions }}</div>
-            <div class="text-caption">Permissions tersedia</div>
-          </q-card-section>
-        </q-card>
-      </div>
-      <div class="col-12 col-md-3">
-        <q-card class="bg-info text-white">
-          <q-card-section>
-            <div class="text-h6">Assigned Users</div>
-            <div class="text-h4">{{ totalAssignedUsers }}</div>
-            <div class="text-caption">Users dengan role</div>
-          </q-card-section>
-        </q-card>
-      </div>
-    </div>
+    <!-- Statistics Cards -->
+    <RoleStatsCard 
+      :stats="roleStats"
+      :loading="statsLoading"
+      :error="statsError"
+      @retry="retryLoadStats"
+    />
 
     <!-- Filters -->
     <q-card class="q-mb-md">
       <q-card-section>
         <div class="row q-gutter-md">
-          <div class="col-12 col-md-3">
+          <div class="col-12 col-md-4">
             <q-input
-              debounce="500"
-              v-model="localFilters.search"
-              placeholder="Cari role..."
+              debounce="300"
+              :model-value="filter.search"
+              @update:model-value="roleStore.setFilter('search', $event)"
+              placeholder="Cari role berdasarkan nama atau deskripsi..."
               outlined
               dense
+              clearable
             >
               <template v-slot:prepend>
                 <q-icon name="search" />
               </template>
             </q-input>
           </div>
-          <div class="col-12 col-md-2">
+          <div class="col-12 col-md-3">
             <q-select
-              v-model="localFilters.hasUsers"
-              :options="userFilterOptions"
-              label="Status Pengguna"
+              :model-value="filter.status"
+              @update:model-value="roleStore.setFilter('status', $event)"
+              :options="statusOptions"
+              placeholder="Filter Status"
               outlined
               dense
               clearable
+              emit-value
+              map-options
             />
           </div>
-          <div class="col-12 col-md-2">
+          <div class="col-12 col-md-3">
             <q-select
-              v-model="localFilters.permissionCount"
-              :options="permissionFilterOptions"
-              label="Jumlah Permission"
+              :model-value="filter.permissions_count"
+              @update:model-value="roleStore.setFilter('permissions_count', $event)"
+              :options="permissionCountOptions"
+              placeholder="Filter Permissions"
               outlined
               dense
               clearable
+              emit-value
+              map-options
             />
           </div>
-          <div class="col-auto">
+          <div class="col-12 col-md-2">
             <q-btn
-              color="secondary"
+              color="primary"
               icon="refresh"
-              label="Muat Ulang"
+              label="Refresh"
               @click="refreshData"
+              :loading="loading"
+              dense
             />
           </div>
         </div>
@@ -110,35 +88,22 @@
       <q-card-section>
 
         <q-table
+          class="table-clean"
           :rows="roles"
           :columns="columns"
           row-key="id"
           :loading="loading"
           v-model:pagination="pagination"
           @request="onRequest"
+          binary-state-sort
+          :rows-per-page-options="[10, 25, 50, 100]"
         >
-          <template v-slot:body-cell-permissions="props">
+          <template v-slot:body-cell-permissions_count="props">
             <q-td :props="props">
-              <div class="q-gutter-xs">
-                <q-chip
-                  v-for="permission in props.row.permissions.slice(0, 3)"
-                  :key="permission.id"
-                  size="sm"
-                  color="blue-grey-2"
-                  text-color="blue-grey-8"
-                >
-                  {{ permission.name }}
-                </q-chip>
-                <q-chip
-                  v-if="props.row.permissions.length > 3"
-                  size="sm"
-                  color="grey-3"
-                  text-color="grey-7"
-                >
-                  +{{ props.row.permissions.length - 3 }} lainnya
-                </q-chip>
-                <span v-if="!props.row.permissions || props.row.permissions.length === 0" class="text-grey-6">No Permissions</span>
-              </div>
+              <q-badge 
+                :color="props.row.permissions_count > 0 ? 'blue' : 'grey'" 
+                :label="props.row.permissions_count || 0" 
+              />
             </q-td>
           </template>
 
@@ -153,38 +118,44 @@
 
           <template v-slot:body-cell-actions="props">
             <q-td :props="props">
-              <q-btn
-                flat
-                round
-                size="sm"
-                icon="visibility"
-                color="primary"
-                @click="viewRole(props.row)"
-              >
-                <q-tooltip>View Details</q-tooltip>
-              </q-btn>
-              <q-btn
-                flat
-                round
-                size="sm"
-                icon="edit"
-                color="warning"
-                @click="editRole(props.row)"
-                :disable="!hasPermission('app.management.roles.update')"
-              >
-                <q-tooltip>Edit Role</q-tooltip>
-              </q-btn>
-              <q-btn
-                flat
-                round
-                size="sm"
-                icon="delete"
-                color="negative"
-                @click="confirmDelete(props.row)"
-                :disable="!hasPermission('app.management.roles.destroy') || props.row.name === 'Super Admin'"
-              >
-                <q-tooltip>{{ props.row.name === 'Super Admin' ? 'Cannot delete super admin' : 'Hapus Role' }}</q-tooltip>
-              </q-btn>
+              <div class="q-gutter-xs">
+                <q-btn
+                  flat
+                  dense
+                  round
+                  color="blue"
+                  icon="visibility"
+                  size="sm"
+                  @click="viewRole(props.row)"
+                  :disable="!hasPermission('app.management.roles.show')"
+                >
+                  <q-tooltip>Lihat Detail</q-tooltip>
+                </q-btn>
+                <q-btn
+                  flat
+                  dense
+                  round
+                  color="orange"
+                  icon="edit"
+                  size="sm"
+                  @click="editRole(props.row)"
+                  :disable="!hasPermission('app.management.roles.update')"
+                >
+                  <q-tooltip>Edit Role</q-tooltip>
+                </q-btn>
+                <q-btn
+                  flat
+                  dense
+                  round
+                  color="red"
+                  icon="delete"
+                  size="sm"
+                  @click="confirmDelete(props.row)"
+                  :disable="!hasPermission('app.management.roles.delete') || props.row.name === 'Super Admin'"
+                >
+                  <q-tooltip>Hapus Role</q-tooltip>
+                </q-btn>
+              </div>
             </q-td>
           </template>
         </q-table>
@@ -202,9 +173,16 @@
           <q-form @submit="saveRole" class="q-gutter-md">
             <q-input
               v-model="roleForm.name"
-              label="Nama Role"
+              label="Nama Role *"
               outlined
-              :rules="[val => !!val || 'Nama role wajib diisi']"
+              required
+              :rules="[
+                val => !!val || 'Nama role wajib diisi',
+                val => val.length >= 3 || 'Nama role minimal 3 karakter',
+                val => val.length <= 50 || 'Nama role maksimal 50 karakter'
+              ]"
+              counter
+              maxlength="50"
             />
 
             <q-input
@@ -213,21 +191,93 @@
               outlined
               type="textarea"
               rows="3"
+              :rules="[
+                val => !val || val.length <= 255 || 'Deskripsi maksimal 255 karakter'
+              ]"
+              counter
+              maxlength="255"
             />
 
-            <div class="text-subtitle2 q-mb-sm">Permissions</div>
-            <div class="row q-gutter-sm">
-              <div
-                v-for="permission in availablePermissions"
-                :key="permission.id"
-                class="col-12 col-sm-6 col-md-4"
-              >
-                <q-checkbox
-                  v-model="roleForm.permissions"
-                  :val="permission.id"
-                  :label="permission.name"
-                  dense
-                />
+            <div class="q-mb-md">
+              <div class="text-subtitle2 q-mb-sm">Permissions *</div>
+              <div class="text-caption text-grey-6 q-mb-md">Pilih permissions yang akan diberikan untuk role ini</div>
+              
+              <q-card flat bordered class="q-pa-md" style="max-height: 400px; overflow-y: auto;">
+                <!-- Permissions grouped by category -->
+                <div v-if="permissionsByCategory && Object.keys(permissionsByCategory).length > 0">
+                  <div 
+                    v-for="(permissions, category) in permissionsByCategory" 
+                    :key="category"
+                    class="q-mb-lg"
+                  >
+                    <!-- Category Header -->
+                    <div class="row items-center q-mb-sm">
+                      <div class="col">
+                        <div class="text-weight-medium text-primary">{{ category }}</div>
+                        <div class="text-caption text-grey-6">{{ permissions.length }} permissions</div>
+                      </div>
+                      <div class="col-auto">
+                        <q-btn
+                          flat
+                          dense
+                          size="sm"
+                          :label="isAllCategorySelected(category) ? 'Unselect All' : 'Select All'"
+                          :color="isAllCategorySelected(category) ? 'negative' : 'positive'"
+                          @click="toggleCategorySelection(category)"
+                        />
+                      </div>
+                    </div>
+                    
+                    <!-- Permissions in category -->
+                    <div class="row q-gutter-sm">
+                      <div
+                        v-for="permission in permissions"
+                        :key="permission.id"
+                        class="col-12"
+                      >
+                        <q-checkbox
+                          v-model="roleForm.permissions"
+                          :val="permission.id"
+                          dense
+                          class="full-width"
+                        >
+                          <div class="q-ml-sm">
+                            <div class="text-body2">{{ formatPermissionName(permission.name) }}</div>
+                            <div class="text-caption text-grey-6">{{ permission.description }}</div>
+                          </div>
+                        </q-checkbox>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Fallback for flat permissions (backward compatibility) -->
+                <div v-else-if="availablePermissions && availablePermissions.length > 0" class="row q-gutter-sm">
+                  <div
+                    v-for="permission in availablePermissions"
+                    :key="permission.id"
+                    class="col-12 col-sm-6"
+                  >
+                    <q-checkbox
+                      v-model="roleForm.permissions"
+                      :val="permission.id"
+                      :label="permission.name"
+                      dense
+                      class="full-width"
+                    />
+                  </div>
+                </div>
+                
+                <!-- No permissions available -->
+                <div v-else class="text-center text-grey-6 q-pa-md">
+                  <q-icon name="security" size="48px" class="q-mb-sm" />
+                  <div>Tidak ada permissions tersedia</div>
+                  <div class="text-caption">Pastikan backend sudah mengembalikan data permissions</div>
+                </div>
+              </q-card>
+              
+              <div class="text-caption text-grey-6 q-mt-sm">
+                {{ roleForm.permissions?.length || 0 }} permissions dipilih dari {{ availablePermissions?.length || 0 }} total permissions
               </div>
             </div>
           </q-form>
@@ -281,17 +331,58 @@
               <q-item-section>
                 <q-item-label>Permissions ({{ selectedRole.permissions?.length || 0 }})</q-item-label>
                 <q-item-label caption>
-                  <div class="q-gutter-xs q-mt-sm">
-                    <q-chip
-                      v-for="permission in selectedRole.permissions || []"
-                      :key="permission.id"
-                      size="sm"
-                      color="blue-grey-2"
-                      text-color="blue-grey-8"
-                    >
-                      {{ permission.name }}
-                    </q-chip>
-                    <span v-if="!selectedRole.permissions || selectedRole.permissions.length === 0" class="text-grey-6">Tidak ada permissions</span>
+                  <div class="q-mt-sm">
+                    <q-card flat bordered class="q-pa-md" style="max-height: 300px; overflow-y: auto;" v-if="selectedRole.permissions && selectedRole.permissions.length > 0">
+                      <!-- Permissions grouped by category -->
+                      <div v-if="selectedRolePermissionsByCategory && Object.keys(selectedRolePermissionsByCategory).length > 0">
+                        <div 
+                          v-for="(permissions, category) in selectedRolePermissionsByCategory" 
+                          :key="category"
+                          class="q-mb-lg"
+                        >
+                          <!-- Category Header -->
+                          <div class="row items-center q-mb-sm">
+                            <div class="col">
+                              <div class="text-weight-medium text-primary">{{ category }}</div>
+                              <div class="text-caption text-grey-6">{{ permissions.length }} permissions</div>
+                            </div>
+                          </div>
+                          
+                          <!-- Permissions in category -->
+                          <div class="row q-gutter-sm">
+                            <div
+                              v-for="permission in permissions"
+                              :key="permission.id"
+                              class="col-12"
+                            >
+                              <div class="q-pa-sm bg-blue-grey-1 rounded-borders">
+                                <div class="text-body2 text-weight-medium">{{ formatPermissionName(permission.name) }}</div>
+                                <div class="text-caption text-grey-6" v-if="permission.description">{{ permission.description }}</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <!-- Fallback for flat permissions (backward compatibility) -->
+                      <div v-else class="q-gutter-xs">
+                        <q-chip
+                          v-for="permission in selectedRole.permissions"
+                          :key="permission.id"
+                          size="sm"
+                          color="blue-grey-2"
+                          text-color="blue-grey-8"
+                        >
+                          {{ formatPermissionName(permission.name) }}
+                        </q-chip>
+                      </div>
+                    </q-card>
+                    
+                    <!-- No permissions -->
+                    <div v-else class="text-center text-grey-6 q-pa-md">
+                      <q-icon name="security" size="32px" class="q-mb-sm" />
+                      <div>Tidak ada permissions</div>
+                    </div>
                   </div>
                 </q-item-label>
               </q-item-section>
@@ -357,20 +448,17 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useQuasar } from 'quasar'
 import { useAuthStore } from 'src/stores/auth'
-import { roleService } from 'src/services'
+import { useRoleStore } from 'src/stores/role'
+import RoleStatsCard from 'src/components/RoleStatsCard.vue'
 
 const $q = useQuasar()
 const authStore = useAuthStore()
+const roleStore = useRoleStore()
 
-// Reactive data
-const roles = ref([])
-const availablePermissions = ref([])
-const loading = ref(false)
-const saving = ref(false)
-const deleting = ref(false)
+// Local reactive data for UI state
 const showCreateDialog = ref(false)
 const showViewDialog = ref(false)
 const showDeleteDialog = ref(false)
@@ -378,32 +466,18 @@ const editingRole = ref(null)
 const selectedRole = ref(null)
 const roleToDelete = ref(null)
 
-// Local filters for v-model (separated from store filters)
-const localFilters = reactive({
-  search: '',
-  hasUsers: null,
-  permissionCount: null
-})
-
 // Filter options
-const userFilterOptions = [
-  { label: 'Dengan Pengguna', value: 'with_users' },
-  { label: 'Tanpa Pengguna', value: 'without_users' }
+const statusOptions = [
+  { label: 'Aktif', value: 'active' },
+  { label: 'Tidak Aktif', value: 'inactive' }
 ]
 
-const permissionFilterOptions = [
-  { label: 'Banyak (>10)', value: 'many' },
-  { label: 'Sedang (5-10)', value: 'medium' },
-  { label: 'Sedikit (<5)', value: 'few' }
+const permissionCountOptions = [
+  { label: 'Tanpa Permission', value: '0' },
+  { label: '1-5 Permissions', value: '1-5' },
+  { label: '6-10 Permissions', value: '6-10' },
+  { label: '10+ Permissions', value: '10+' }
 ]
-
-// Role Statistics
-const roleStats = ref({
-  total_roles: 0,
-  active_roles: 0,
-  total_permissions: 0,
-  total_assigned_users: 0
-})
 
 // Form data
 const roleForm = ref({
@@ -422,133 +496,131 @@ const columns = [
     sortable: true
   },
   {
-    name: 'description',
-    label: 'Deskripsi',
-    align: 'left',
-    field: 'description'
-  },
-  {
-    name: 'permissions',
-    label: 'Permissions',
-    align: 'left',
-    field: 'permissions'
+    name: 'permissions_count',
+    label: 'Total Permissions',
+    align: 'center',
+    field: 'permissions_count',
+    sortable: true
   },
   {
     name: 'users_count',
-    label: 'Jumlah User',
+    label: 'Total User',
     align: 'center',
     field: 'users_count',
     sortable: true
   },
   {
     name: 'actions',
-    label: 'Aksi',
+    label: 'Actions',
     align: 'center'
   }
 ]
 
-const pagination = ref({
-  sortBy: 'name',
-  descending: false,
-  page: 1,
-  rowsPerPage: 10,
-  rowsNumber: 0
-})
-
-// Computed properties
-const totalRoles = computed(() => roleStats.value.total_roles)
-const activeRoles = computed(() => roleStats.value.active_roles)
-const totalPermissions = computed(() => roleStats.value.total_permissions)
-const totalAssignedUsers = computed(() => roleStats.value.total_assigned_users)
+// Computed properties from store
+const roles = computed(() => roleStore.roles)
+const availablePermissions = computed(() => roleStore.availablePermissions)
+const loading = computed(() => roleStore.loading)
+const saving = computed(() => roleStore.saving)
+const deleting = computed(() => roleStore.deleting)
+const filter = computed(() => roleStore.filters)
+const pagination = computed(() => roleStore.pagination)
+const roleStats = computed(() => roleStore.stats)
+const statsLoading = computed(() => roleStore.statsLoading)
+const statsError = computed(() => roleStore.statsError)
 
 const hasPermission = computed(() => {
   return (permission) => authStore.hasPermission(permission)
 })
 
-// Watcher to update filters from local filters with debounce
+// Group permissions by category
+const permissionsByCategory = computed(() => {
+  if (!availablePermissions.value || availablePermissions.value.length === 0) {
+    return {}
+  }
+  
+  const grouped = {}
+  availablePermissions.value.forEach(permission => {
+    const category = permission.category || 'Uncategorized'
+    if (!grouped[category]) {
+      grouped[category] = []
+    }
+    grouped[category].push(permission)
+  })
+  
+  // Sort categories alphabetically
+  const sortedGrouped = {}
+  Object.keys(grouped).sort().forEach(key => {
+    sortedGrouped[key] = grouped[key].sort((a, b) => a.name.localeCompare(b.name))
+  })
+  
+  return sortedGrouped
+})
+
+// Group selected role permissions by category for view dialog
+const selectedRolePermissionsByCategory = computed(() => {
+  if (!selectedRole.value || !selectedRole.value.permissions || selectedRole.value.permissions.length === 0) {
+    return {}
+  }
+  
+  const grouped = {}
+  selectedRole.value.permissions.forEach(permission => {
+    // Try to get category from permission itself first
+    let category = permission.category
+    
+    // If no category, try to find it from availablePermissions
+    if (!category && availablePermissions.value) {
+      const matchedPermission = availablePermissions.value.find(p => p.id === permission.id || p.name === permission.name)
+      category = matchedPermission?.category || 'Uncategorized'
+    }
+    
+    // Fallback to Uncategorized
+    if (!category) {
+      category = 'Uncategorized'
+    }
+    
+    if (!grouped[category]) {
+      grouped[category] = []
+    }
+    grouped[category].push(permission)
+  })
+  
+  // Sort categories alphabetically
+  const sortedGrouped = {}
+  Object.keys(grouped).sort().forEach(key => {
+    sortedGrouped[key] = grouped[key].sort((a, b) => a.name.localeCompare(b.name))
+  })
+  
+  return sortedGrouped
+})
+
+// Watcher to update filters with debounce
 watch(
-  () => localFilters.search,
+  () => filter.value.search,
   () => {
-    pagination.value.page = 1
-    fetchRoles()
+    roleStore.setPagination({ page: 1 })
+    roleStore.fetchRoles()
   },
   { debounce: 500 }
 )
 
 watch(
-  () => localFilters.hasUsers,
+  () => filter.value.status,
   () => {
-    pagination.value.page = 1
-    fetchRoles()
+    roleStore.setPagination({ page: 1 })
+    roleStore.fetchRoles()
   }
 )
 
 watch(
-  () => localFilters.permissionCount,
+  () => filter.value.permissions_count,
   () => {
-    pagination.value.page = 1
-    fetchRoles()
+    roleStore.setPagination({ page: 1 })
+    roleStore.fetchRoles()
   }
 )
 
-// Methods
-const fetchRoles = async () => {
-  try {
-    loading.value = true
-    const params = {
-      page: pagination.value.page,
-      per_page: pagination.value.rowsPerPage,
-      search: localFilters.search,
-      sort_by: pagination.value.sortBy,
-      sort_order: pagination.value.descending ? 'desc' : 'asc',
-      has_users: localFilters.hasUsers,
-      permission_count: localFilters.permissionCount
-    }
-    
-    const response = await roleService.getRoles(params)
-    
-    // Handle the response structure from backend
-    if (response.data && response.data.success) {
-      roles.value = response.data.data.data
-      pagination.value.rowsNumber = response.data.data.total
-      pagination.value.page = response.data.data.current_page
-      pagination.value.rowsPerPage = response.data.data.per_page
-    } else {
-      throw new Error('Invalid response format')
-    }
-  } catch (error) {
-    console.error('Error loading roles:', error)
-    $q.notify({
-      type: 'negative',
-      message: 'Gagal memuat data role',
-      caption: error.response?.data?.message || error.message
-    })
-  } finally {
-    loading.value = false
-  }
-}
-
-const fetchRoleStats = async () => {
-  try {
-    const response = await roleService.getRoleStats()
-    if (response.data && response.data.success) {
-      roleStats.value = response.data.data
-    }
-  } catch (error) {
-    console.error('Error loading role stats:', error)
-  }
-}
-
-const fetchPermissions = async () => {
-  try {
-    const response = await roleService.getPermissions()
-    if (response.data && response.data.success) {
-      availablePermissions.value = response.data.data
-    }
-  } catch (error) {
-    console.error('Error fetching permissions:', error)
-  }
-}
+// Methods using store actions
+const retryLoadStats = () => roleStore.fetchStats()
 
 const viewRole = (role) => {
   selectedRole.value = role
@@ -570,32 +642,107 @@ const editRole = (role) => {
   roleForm.value = {
     name: role.name,
     description: role.description || '',
-    permissions: role.permissions.map(p => p.id)
+    permissions: role.permissions ? role.permissions.map(p => p.id) : []
   }
   showCreateDialog.value = true
 }
 
 const editRoleFromView = () => {
-  showViewDialog.value = false
-  editRole(selectedRole.value)
+  if (selectedRole.value) {
+    editRole(selectedRole.value)
+    showViewDialog.value = false
+  }
 }
 
-const refreshData = async () => {
-  await Promise.all([fetchRoles(), fetchRoleStats()])
-  $q.notify({
-    type: 'positive',
-    message: 'Data berhasil dimuat ulang'
-  })
+// Helper methods for permissions UI
+const isAllCategorySelected = (category) => {
+  const categoryPermissions = permissionsByCategory.value[category] || []
+  if (categoryPermissions.length === 0) return false
+  
+  return categoryPermissions.every(permission => 
+    roleForm.value.permissions.includes(permission.id)
+  )
+}
+
+const toggleCategorySelection = (category) => {
+  const categoryPermissions = permissionsByCategory.value[category] || []
+  const isAllSelected = isAllCategorySelected(category)
+  
+  if (isAllSelected) {
+    // Remove all permissions from this category
+    categoryPermissions.forEach(permission => {
+      const index = roleForm.value.permissions.indexOf(permission.id)
+      if (index > -1) {
+        roleForm.value.permissions.splice(index, 1)
+      }
+    })
+  } else {
+    // Add all permissions from this category
+    categoryPermissions.forEach(permission => {
+      if (!roleForm.value.permissions.includes(permission.id)) {
+        roleForm.value.permissions.push(permission.id)
+      }
+    })
+  }
+}
+
+const formatPermissionName = (permissionName) => {
+  // Convert "app.management.users.index" to "Users Index"
+  if (!permissionName) return ''
+  
+  const parts = permissionName.split('.')
+  if (parts.length >= 3) {
+    const module = parts[parts.length - 2] // e.g., "users"
+    const action = parts[parts.length - 1] // e.g., "index"
+    
+    // Capitalize and format
+    const formattedModule = module.charAt(0).toUpperCase() + module.slice(1)
+    const formattedAction = action.charAt(0).toUpperCase() + action.slice(1)
+    
+    return `${formattedModule} ${formattedAction}`
+  }
+  
+  return permissionName
 }
 
 const formatDate = (dateString) => {
   return new Date(dateString).toLocaleString('id-ID')
 }
 
+const refreshData = async () => {
+  await Promise.all([
+    roleStore.fetchRoles(),
+    roleStore.fetchStats()
+  ])
+}
+
 const saveRole = async () => {
+  // Validation
+  if (!roleForm.value.name || !roleForm.value.name.trim()) {
+    $q.notify({
+      type: 'warning',
+      message: 'Nama role wajib diisi'
+    })
+    return
+  }
+  
+  if (roleForm.value.name.trim().length < 3) {
+    $q.notify({
+      type: 'warning',
+      message: 'Nama role minimal 3 karakter'
+    })
+    return
+  }
+  
+  if (!roleForm.value.permissions || roleForm.value.permissions.length === 0) {
+    $q.notify({
+      type: 'warning',
+      message: 'Pilih minimal satu permission'
+    })
+    return
+  }
+  
   try {
-    saving.value = true
-    
     // Convert permission IDs to permission names for backend
     const permissionNames = roleForm.value.permissions.map(permId => {
       const permission = availablePermissions.value.find(p => p.id === permId)
@@ -608,13 +755,13 @@ const saveRole = async () => {
     }
     
     if (editingRole.value) {
-      await roleService.updateRole(editingRole.value.id, roleData)
+      await roleStore.updateRole(editingRole.value.id, roleData)
       $q.notify({
         type: 'positive',
         message: 'Role berhasil diperbarui'
       })
     } else {
-      await roleService.createRole(roleData)
+      await roleStore.createRole(roleData)
       $q.notify({
         type: 'positive',
         message: 'Role berhasil dibuat'
@@ -622,16 +769,13 @@ const saveRole = async () => {
     }
     
     closeDialog()
-    await fetchRoles()
-    await fetchRoleStats()
+    await refreshData()
   } catch (error) {
     $q.notify({
       type: 'negative',
       message: 'Gagal menyimpan role',
       caption: error.response?.data?.message || error.message
     })
-  } finally {
-    saving.value = false
   }
 }
 
@@ -642,8 +786,7 @@ const confirmDelete = (role) => {
 
 const deleteRole = async () => {
   try {
-    deleting.value = true
-    await roleService.deleteRole(roleToDelete.value.id)
+    await roleStore.deleteRole(roleToDelete.value.id)
     
     $q.notify({
       type: 'positive',
@@ -651,22 +794,21 @@ const deleteRole = async () => {
     })
     
     showDeleteDialog.value = false
-    await fetchRoles()
-    await fetchRoleStats()
+    await refreshData()
   } catch (error) {
     $q.notify({
       type: 'negative',
       message: 'Gagal menghapus role',
       caption: error.response?.data?.message || error.message
     })
-  } finally {
-    deleting.value = false
   }
 }
 
 const closeDialog = () => {
   showCreateDialog.value = false
+  showViewDialog.value = false
   editingRole.value = null
+  selectedRole.value = null
   roleForm.value = {
     name: '',
     description: '',
@@ -676,23 +818,19 @@ const closeDialog = () => {
 
 const onRequest = (props) => {
   const { page, rowsPerPage, sortBy, descending } = props.pagination
-  pagination.value.page = page
-  pagination.value.rowsPerPage = rowsPerPage
-  pagination.value.sortBy = sortBy
-  pagination.value.descending = descending
-  fetchRoles()
+  roleStore.setPagination({
+    page,
+    rowsPerPage,
+    sortBy,
+    descending
+  })
+  roleStore.fetchRoles()
 }
 
 // Lifecycle
 onMounted(() => {
-  fetchRoles()
-  fetchPermissions()
-  fetchRoleStats()
+  roleStore.fetchRoles()
+  roleStore.fetchPermissions()
+  roleStore.fetchStats()
 })
 </script>
-
-<style scoped>
-.q-table {
-  box-shadow: none;
-}
-</style>

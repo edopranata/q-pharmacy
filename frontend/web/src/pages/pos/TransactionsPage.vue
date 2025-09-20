@@ -338,13 +338,16 @@ export default {
     ]
 
     const pagination = computed({
-      get: () => ({
-        sortBy: transactionStore.pagination.sortBy || 'created_at',
-        descending: transactionStore.pagination.descending !== undefined ? transactionStore.pagination.descending : true,
-        page: transactionStore.pagination.page || 1,
-        rowsPerPage: transactionStore.pagination.rowsPerPage || 10,
-        rowsNumber: transactionStore.pagination.rowsNumber || 0
-      }),
+      get: () => {
+        const storePagination = transactionStore.pagination
+        return {
+          sortBy: storePagination.sortBy || 'created_at',
+          descending: storePagination.descending !== undefined ? storePagination.descending : true,
+          page: storePagination.page || 1,
+          rowsPerPage: storePagination.rowsPerPage || 10,
+          rowsNumber: storePagination.rowsNumber || 0
+        }
+      },
       set: (val) => {
         transactionStore.setPagination(val)
       }

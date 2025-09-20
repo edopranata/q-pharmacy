@@ -49,7 +49,7 @@ class BaseResponseService
     /**
      * Return a paginated response
      */
-    public static function paginated(LengthAwarePaginator $paginator, string $message = 'Data retrieved successfully', ?string $resourceClass = null): JsonResponse
+    public static function paginated(LengthAwarePaginator $paginator, string $message = 'Data retrieved successfully', ?string $resourceClass = null, array $additionalMeta = []): JsonResponse
     {
         $data = $paginator->items();
 
@@ -58,16 +58,26 @@ class BaseResponseService
             $data = $resourceClass::collection($paginator->items())->resolve();
         }
 
+        $meta = [
+            'total' => $paginator->total(),
+            'per_page' => $paginator->perPage(),
+            'current_page' => $paginator->currentPage(),
+            'last_page' => $paginator->lastPage(),
+            'from' => $paginator->firstItem(),
+            'to' => $paginator->lastItem(),
+            'has_more_pages' => $paginator->hasMorePages(),
+        ];
+
+        // Merge any additional meta information
+        if (!empty($additionalMeta)) {
+            $meta = array_merge($meta, $additionalMeta);
+        }
+
         return response()->json([
             'success' => true,
             'message' => $message,
             'data' => $data,
-            'meta' => [
-                'total' => $paginator->total(),
-                'per_page' => $paginator->perPage(),
-                'current_page' => $paginator->currentPage(),
-                'last_page' => $paginator->lastPage(),
-            ]
+            'meta' => $meta
         ]);
     }
 

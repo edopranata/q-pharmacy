@@ -57,6 +57,7 @@
 
     <!-- Data Table -->
     <q-table
+      class="table-elevated"
       ref="categoryTable"
       :rows="categories"
       :columns="columns"
@@ -222,7 +223,7 @@
 <script setup>
 import { ref, reactive, onMounted, computed, watch } from 'vue'
 import { useCategoryStore } from 'src/stores/category'
-import { Notify, Dialog } from 'quasar'
+import { Dialog } from 'quasar'
 
 // Reactive data
 const categoryStore = useCategoryStore()
@@ -259,13 +260,16 @@ const categoryForm = reactive({
 
 // Menggunakan pagination dari store dengan fallback untuk UI
 const pagination = computed({
-  get: () => ({
-    sortBy: categoryStore.pagination.sortBy,
-    descending: categoryStore.pagination.descending,
-    page: categoryStore.pagination.page,
-    rowsPerPage: categoryStore.pagination.rowsPerPage,
-    rowsNumber: categoryStore.pagination.rowsNumber
-  }),
+  get: () => {
+    const storePagination = categoryStore.pagination
+    return {
+      sortBy: storePagination.sortBy,
+      descending: storePagination.descending,
+      page: storePagination.page,
+      rowsPerPage: storePagination.rowsPerPage,
+      rowsNumber: storePagination.rowsNumber
+    }
+  },
   set: (val) => {
     categoryStore.setPagination(val)
   }
@@ -352,11 +356,8 @@ const loadCategories = async (props = {}) => {
     
     await categoryStore.fetchCategories(params)
   } catch (error) {
-     Notify.create({
-       type: 'negative',
-       message: error.message || 'Gagal memuat data kategori'
-     })
-   }
+    console.error('Error loading categories:', error)
+  }
 }
 
 const onRequest = (props) => {
@@ -385,24 +386,13 @@ const saveCategory = async () => {
     
     if (editMode.value) {
       await categoryStore.updateCategory(categoryForm.id, data)
-      Notify.create({
-        type: 'positive',
-        message: 'Category updated successfully'
-      })
     } else {
       await categoryStore.createCategory(data)
-      Notify.create({
-        type: 'positive',
-        message: 'Category created successfully'
-      })
     }
     closeDialog()
     loadCategories()
   } catch (error) {
-    Notify.create({
-      type: 'negative',
-      message: error.message || 'Failed to save category'
-    })
+    console.error('Error saving category:', error)
   } finally {
     saving.value = false
   }
@@ -422,15 +412,8 @@ const deleteCategory = (category) => {
   }).onOk(async () => {
     try {
       await categoryStore.deleteCategory(category.id)
-      Notify.create({
-        type: 'positive',
-        message: 'Category deleted successfully'
-      })
     } catch (error) {
-      Notify.create({
-        type: 'negative',
-        message: error.message || 'Failed to delete category'
-      })
+      console.error('Error deleting category:', error)
     }
   })
 }
@@ -450,9 +433,3 @@ onMounted(() => {
   loadCategories()
 })
 </script>
-
-<style scoped>
-.q-table {
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2), 0 2px 2px rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12);
-}
-</style>

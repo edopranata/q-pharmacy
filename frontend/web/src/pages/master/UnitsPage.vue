@@ -59,6 +59,7 @@
 
     <!-- Data Table -->
     <q-table
+      class="table-elevated"
       ref="unitTable"
       :rows="units"
       :columns="columns"
@@ -256,7 +257,7 @@
 <script setup>
 import { ref, reactive, onMounted, computed, watch } from 'vue'
 import { useUnitStore } from 'src/stores/unit'
-import { Notify, Dialog } from 'quasar'
+import { Dialog } from 'quasar'
 
 // Reactive data
 const unitStore = useUnitStore()
@@ -294,13 +295,16 @@ const unitForm = reactive({
 
 // Menggunakan pagination dari store dengan fallback untuk UI
 const pagination = computed({
-  get: () => ({
-    sortBy: unitStore.pagination.sortBy,
-    descending: unitStore.pagination.descending,
-    page: unitStore.pagination.page,
-    rowsPerPage: unitStore.pagination.rowsPerPage,
-    rowsNumber: unitStore.pagination.rowsNumber
-  }),
+  get: () => {
+    const storePagination = unitStore.pagination
+    return {
+      sortBy: storePagination.sortBy,
+      descending: storePagination.descending,
+      page: storePagination.page,
+      rowsPerPage: storePagination.rowsPerPage,
+      rowsNumber: storePagination.rowsNumber
+    }
+  },
   set: (val) => {
     unitStore.setPagination(val)
   }
@@ -393,10 +397,7 @@ const loadUnits = async (props = {}) => {
 
     await unitStore.fetchUnits(params)
   } catch (error) {
-    Notify.create({
-      type: 'negative',
-      message: error.message || 'Gagal memuat data satuan'
-    })
+    console.error('Error loading units:', error)
   }
 }
 
@@ -428,26 +429,15 @@ const saveUnit = async () => {
     
     if (editMode.value) {
       await unitStore.updateUnit(unitForm.id, data)
-      Notify.create({
-        type: 'positive',
-        message: 'Unit updated successfully'
-      })
     } else {
       await unitStore.createUnit(data)
-      Notify.create({
-        type: 'positive',
-        message: 'Unit created successfully'
-      })
     }
     
     // Refresh data setelah save
     loadUnits()
     closeDialog()
   } catch (error) {
-    Notify.create({
-      type: 'negative',
-      message: error.message || 'Failed to save unit'
-    })
+    console.error('Error saving unit:', error)
   } finally {
     saving.value = false
   }
@@ -467,15 +457,8 @@ const deleteUnit = (unit) => {
   }).onOk(async () => {
     try {
       await unitStore.deleteUnit(unit.id)
-      Notify.create({
-        type: 'positive',
-        message: 'Unit deleted successfully'
-      })
     } catch (error) {
-      Notify.create({
-        type: 'negative',
-        message: error.message || 'Failed to delete unit'
-      })
+      console.error('Error deleting unit:', error)
     }
   })
 }
@@ -496,9 +479,3 @@ onMounted(() => {
   loadUnits()
 })
 </script>
-
-<style scoped>
-.q-table {
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2), 0 2px 2px rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12);
-}
-</style>

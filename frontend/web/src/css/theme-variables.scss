@@ -6,8 +6,11 @@
 // BRAND COLORS
 // =============================================================================
 $brand-primary: #1976d2;
+$brand-primary-dark: #1565c0;
 $brand-secondary: #26a69a;
+$brand-secondary-dark: #00897b;
 $brand-accent: #9c27b0;
+$brand-accent-dark: #7b1fa2;
 $brand-dark: #1d1d1d;
 $brand-positive: #21ba45;
 $brand-negative: #c10015;
@@ -18,11 +21,628 @@ $brand-warning: #f2c037;
 // PHARMACY SPECIFIC COLORS
 // =============================================================================
 $pharmacy-green: #4caf50;
+$pharmacy-green-dark: #388e3c;
 $pharmacy-blue: #2196f3;
+$pharmacy-blue-dark: #1976d2;
 $pharmacy-red: #f44336;
+$pharmacy-red-dark: #d32f2f;
 $pharmacy-orange: #ff9800;
+$pharmacy-orange-dark: #f57c00;
 $pharmacy-purple: #9c27b0;
+$pharmacy-purple-dark: #7b1fa2;
 $pharmacy-teal: #009688;
+$pharmacy-teal-dark: #00695c;
+
+// Warna spesifik untuk aplikasi farmasi
+$pharmacy-primary: #2E7D32;
+$pharmacy-secondary: #4CAF50;
+$pharmacy-accent: #81C784;
+$pharmacy-warning: #FF9800;
+$pharmacy-error: #F44336;
+$pharmacy-info: #2196F3;
+$pharmacy-success: #4CAF50;
+
+// =============================================================================
+// DARK THEME VARIABLES
+// =============================================================================
+body.body--dark {
+  // Warna spesifik untuk aplikasi farmasi
+  --pharmacy-primary: #2E7D32;
+  --pharmacy-secondary: #4CAF50;
+  --pharmacy-accent: #81C784;
+  --pharmacy-warning: #FF9800;
+  --pharmacy-error: #F44336;
+  --pharmacy-info: #2196F3;
+  --pharmacy-success: #4CAF50;
+
+  // ===== DARK THEME CARD VARIABLES =====
+  // Card content spacing (same for both themes)
+  --card-header-border: 1px solid rgba(255, 255, 255, 0.12);
+  --card-footer-border: 1px solid rgba(255, 255, 255, 0.12);
+
+
+  --card-stats-icon-bg: linear-gradient(135deg, #6366f1, #8b5cf6);
+  --card-stats-icon-text: #ffffff;
+
+  // Card Primary - Dark
+  --card-primary-bg: #1e1e1e;
+  --card-primary-border: 1px solid rgba(66, 165, 245, 0.2);
+  --card-primary-shadow: 0 2px 8px rgba(66, 165, 245, 0.15);
+  --card-primary-text: #ffffff;
+
+  // Card Secondary - Dark
+  --card-secondary-bg: #1e1e1e;
+  --card-secondary-border: 1px solid rgba(186, 104, 200, 0.2);
+  --card-secondary-shadow: 0 2px 8px rgba(186, 104, 200, 0.15);
+  --card-secondary-text: #ffffff;
+
+  // Card Success - Dark
+  --card-success-bg: #1e1e1e;
+  --card-success-border: 1px solid rgba(102, 187, 106, 0.2);
+  --card-success-shadow: 0 2px 8px rgba(102, 187, 106, 0.15);
+  --card-success-text: #ffffff;
+
+  // Card Warning - Dark
+  --card-warning-bg: #1e1e1e;
+  --card-warning-border: 1px solid rgba(255, 183, 77, 0.2);
+  --card-warning-shadow: 0 2px 8px rgba(255, 183, 77, 0.15);
+  --card-warning-text: #ffffff;
+
+  // Card Error - Dark
+  --card-error-bg: #1e1e1e;
+  --card-error-border: 1px solid rgba(239, 83, 80, 0.2);
+  --card-error-shadow: 0 2px 8px rgba(239, 83, 80, 0.15);
+  --card-error-text: #ffffff;
+
+  // Card Info - Dark
+  --card-info-bg: #1e1e1e;
+  --card-info-border: 1px solid rgba(100, 181, 246, 0.2);
+  --card-info-shadow: 0 2px 8px rgba(100, 181, 246, 0.15);
+  --card-info-text: #ffffff;
+
+  // Card Neutral - Dark
+  --card-neutral-bg: #1e1e1e;
+  --card-neutral-border: 1px solid rgba(189, 189, 189, 0.2);
+  --card-neutral-shadow: 0 2px 8px rgba(189, 189, 189, 0.15);
+  --card-neutral-text: #ffffff;
+
+  // Card Gradient - Dark (enhanced for dark theme)
+  --card-gradient-bg: linear-gradient(135deg, #4c63d2 0%, #5a4fcf 100%);
+  --card-gradient-border: 1px solid rgba(76, 99, 210, 0.3);
+  --card-gradient-shadow: 0 4px 15px rgba(76, 99, 210, 0.3);
+
+  // Card Stats - Dark
+  --card-stats-bg: #1e1e1e;
+  --card-stats-border: 1px solid rgba(255, 255, 255, 0.12);
+  --card-stats-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --card-stats-text: #ffffff;
+  --card-stats-value-color: #ffffff;
+  --card-stats-label-color: #b0b0b0;
+
+  // Card Glass - Dark
+  --card-glass-bg: rgba(30, 30, 30, 0.8);
+  --card-glass-border: 1px solid rgba(255, 255, 255, 0.1);
+  --card-glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --card-glass-text: #ffffff;
+  --card-glass-accent: linear-gradient(90deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
+  --card-glass-icon-bg: rgba(255, 255, 255, 0.15);
+  --card-glass-icon-text: #ffffff;
+
+  // Card footer background - Dark
+  --card-footer-bg: rgba(255, 255, 255, 0.05);
+
+  // ===== DARK THEME BUTTON VARIABLES =====
+  // Button Primary - Dark
+  --btn-primary-bg: #42a5f5;
+  --btn-primary-text: #ffffff;
+  --btn-primary-hover-bg: #1e88e5;
+  --btn-primary-shadow: 0 2px 4px rgba(66, 165, 245, 0.3);
+  --btn-primary-hover-shadow: 0 4px 8px rgba(66, 165, 245, 0.4);
+
+  // Button Secondary - Dark
+  --btn-secondary-bg: #ba68c8;
+  --btn-secondary-text: #ffffff;
+  --btn-secondary-hover-bg: #ab47bc;
+  --btn-secondary-shadow: 0 2px 4px rgba(186, 104, 200, 0.3);
+  --btn-secondary-hover-shadow: 0 4px 8px rgba(186, 104, 200, 0.4);
+
+  // Button Success - Dark
+  --btn-success-bg: #66bb6a;
+  --btn-success-text: #ffffff;
+  --btn-success-hover-bg: #4caf50;
+  --btn-success-shadow: 0 2px 4px rgba(102, 187, 106, 0.3);
+  --btn-success-hover-shadow: 0 4px 8px rgba(102, 187, 106, 0.4);
+
+  // Button Warning - Dark
+  --btn-warning-bg: #ffb74d;
+  --btn-warning-text: #000000;
+  --btn-warning-hover-bg: #ffa726;
+  --btn-warning-shadow: 0 2px 4px rgba(255, 183, 77, 0.3);
+  --btn-warning-hover-shadow: 0 4px 8px rgba(255, 183, 77, 0.4);
+
+  // Button Error - Dark
+  --btn-error-bg: #ef5350;
+  --btn-error-text: #ffffff;
+  --btn-error-hover-bg: #e53935;
+  --btn-error-shadow: 0 2px 4px rgba(239, 83, 80, 0.3);
+  --btn-error-hover-shadow: 0 4px 8px rgba(239, 83, 80, 0.4);
+
+  // Button Info - Dark
+  --btn-info-bg: #64b5f6;
+  --btn-info-text: #ffffff;
+  --btn-info-hover-bg: #42a5f5;
+  --btn-info-shadow: 0 2px 4px rgba(100, 181, 246, 0.3);
+  --btn-info-hover-shadow: 0 4px 8px rgba(100, 181, 246, 0.4);
+
+  // Button Ghost - Dark
+  --btn-ghost-text: #e0e0e0;
+  --btn-ghost-hover-bg: rgba(255, 255, 255, 0.1);
+
+  // Button hover effects - Dark
+  --btn-hover-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+
+  // ===== DARK THEME INPUT VARIABLES =====
+  // Input colors - Dark
+  --input-bg: #2e2e2e;
+  --input-text-color: #ffffff;
+  --input-border-color: rgba(255, 255, 255, 0.2);
+  --input-placeholder-color: #b0b0b0;
+  --input-focus-border-color: #42a5f5;
+  --input-focus-bg: #333333;
+  --input-focus-shadow: 0 0 0 3px rgba(66, 165, 245, 0.2);
+
+  // Input states - Dark
+  --input-disabled-bg: #1a1a1a;
+  --input-disabled-text: #666666;
+  --input-error-border: #ef5350;
+  --input-error-bg: rgba(239, 83, 80, 0.1);
+  --input-error-focus-border: #e53935;
+  --input-error-focus-shadow: 0 0 0 3px rgba(239, 83, 80, 0.2);
+  --input-error-text: #ef5350;
+  --input-success-border: #66bb6a;
+  --input-success-bg: rgba(102, 187, 106, 0.1);
+  --input-success-focus-border: #4caf50;
+  --input-success-focus-shadow: 0 0 0 3px rgba(102, 187, 106, 0.2);
+  --input-success-text: #66bb6a;
+
+  // Input variants - Dark
+  --input-filled-bg: rgba(255, 255, 255, 0.08);
+  --input-filled-focus-bg: rgba(255, 255, 255, 0.12);
+  --input-glass-bg: rgba(30, 30, 30, 0.8);
+  --input-glass-border: rgba(255, 255, 255, 0.1);
+  --input-glass-focus-bg: rgba(30, 30, 30, 0.9);
+  --input-glass-focus-border: rgba(66, 165, 245, 0.3);
+  --input-glass-focus-shadow: 0 0 0 3px rgba(66, 165, 245, 0.2);
+
+  // Input icons and labels - Dark
+  --input-icon-color: #b0b0b0;
+  --input-label-color: #e0e0e0;
+  --input-helper-color: #b0b0b0;
+
+  // ===== TRANSITION VARIABLES =====
+  --transition-duration-fast: 0.15s;
+  --transition-duration-normal: 0.3s;
+  --transition-duration-slow: 0.5s;
+  --transition-duration-slower: 0.75s;
+  --transition-timing-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-timing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --transition-timing-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --transition-timing-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --transition-timing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  // ===== ANIMATION VARIABLES =====
+  --animation-duration-fast: 0.2s;
+  --animation-duration-normal: 0.4s;
+  --animation-duration-slow: 0.6s;
+  --animation-duration-pulse: 2s;
+  --animation-duration-spin: 1s;
+  --animation-duration-bounce: 1s;
+  --animation-duration-ping: 1s;
+  --animation-duration-loading: 1.4s;
+  
+  // ===== ANIMATION TIMING FUNCTIONS =====
+  --animation-timing-linear: linear;
+  --animation-timing-ease: ease;
+  --animation-timing-ease-in: ease-in;
+  --animation-timing-ease-out: ease-out;
+  --animation-timing-ease-in-out: ease-in-out;
+  --animation-timing-bounce: cubic-bezier(0.8, 0, 1, 1);
+  --animation-timing-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  
+  // ===== TRANSFORM VARIABLES =====
+  --transform-scale-sm: 0.95;
+  --transform-scale-md: 1.05;
+  --transform-scale-lg: 1.1;
+  --transform-translate-sm: 4px;
+  --transform-translate-md: 8px;
+  --transform-translate-lg: 16px;
+  --transform-rotate-sm: 3deg;
+  --transform-rotate-md: 6deg;
+  --transform-rotate-lg: 12deg;
+}
+
+// =============================================================================
+// LIGHT THEME VARIABLES (DEFAULT)
+// =============================================================================
+:root,
+body:not(.body--dark) {
+  // Warna spesifik untuk aplikasi farmasi
+  --pharmacy-primary: #2E7D32;
+  --pharmacy-secondary: #4CAF50;
+  --pharmacy-accent: #81C784;
+  --pharmacy-warning: #FF9800;
+  --pharmacy-error: #F44336;
+  --pharmacy-info: #2196F3;
+  --pharmacy-success: #4CAF50;
+
+  // ===== LIGHT THEME CARD VARIABLES =====
+  // Card content spacing (same for both themes)
+  --card-header-border: 1px solid rgba(0, 0, 0, 0.08);
+  --card-footer-border: 1px solid rgba(0, 0, 0, 0.08);
+
+  // Card Stats - Light
+  --card-stats-bg: #ffffff;
+  --card-stats-border: 1px solid rgba(0, 0, 0, 0.08);
+  --card-stats-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --card-stats-text: #1a1a1a;
+  --card-stats-value-color: #1a1a1a;
+  --card-stats-label-color: #6b7280;
+  --card-stats-icon-bg: linear-gradient(135deg, #6366f1, #8b5cf6);
+  --card-stats-icon-text: #ffffff;
+
+  // Card Primary - Light
+  --card-primary-bg: #ffffff;
+  --card-primary-border: 1px solid rgba(25, 118, 210, 0.2);
+  --card-primary-shadow: 0 2px 8px rgba(25, 118, 210, 0.15);
+  --card-primary-text: #1a1a1a;
+
+  // Card Secondary - Light
+  --card-secondary-bg: #ffffff;
+  --card-secondary-border: 1px solid rgba(156, 39, 176, 0.2);
+  --card-secondary-shadow: 0 2px 8px rgba(156, 39, 176, 0.15);
+  --card-secondary-text: #1a1a1a;
+
+  // Card Success - Light
+  --card-success-bg: #ffffff;
+  --card-success-border: 1px solid rgba(76, 175, 80, 0.2);
+  --card-success-shadow: 0 2px 8px rgba(76, 175, 80, 0.15);
+  --card-success-text: #1a1a1a;
+
+  // Card Warning - Light
+  --card-warning-bg: #ffffff;
+  --card-warning-border: 1px solid rgba(255, 152, 0, 0.2);
+  --card-warning-shadow: 0 2px 8px rgba(255, 152, 0, 0.15);
+  --card-warning-text: #1a1a1a;
+
+  // Card Error - Light
+  --card-error-bg: #ffffff;
+  --card-error-border: 1px solid rgba(244, 67, 54, 0.2);
+  --card-error-shadow: 0 2px 8px rgba(244, 67, 54, 0.15);
+  --card-error-text: #1a1a1a;
+
+  // Card Info - Light
+  --card-info-bg: #ffffff;
+  --card-info-border: 1px solid rgba(33, 150, 243, 0.2);
+  --card-info-shadow: 0 2px 8px rgba(33, 150, 243, 0.15);
+  --card-info-text: #1a1a1a;
+
+  // Card Neutral - Light
+  --card-neutral-bg: #ffffff;
+  --card-neutral-border: 1px solid rgba(158, 158, 158, 0.2);
+  --card-neutral-shadow: 0 2px 8px rgba(158, 158, 158, 0.15);
+  --card-neutral-text: #1a1a1a;
+}
+
+// ===== SCSS VARIABLES =====
+
+// ===== CARD VARIABLES =====
+// Base card properties
+$card-border-radius: 12px;
+$card-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+$card-min-height: 120px;
+$card-hover-transform: translateY(-2px);
+$card-hover-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+$card-accent-height: 4px;
+$card-accent-opacity: 1;
+
+// Card content spacing
+$card-content-padding: 16px;
+$card-header-padding: 16px 16px 12px 16px;
+$card-footer-padding: 12px 16px 16px 16px;
+$card-header-border: 1px solid rgba(0, 0, 0, 0.08);
+$card-footer-border: 1px solid rgba(0, 0, 0, 0.08);
+$card-header-weight: 600;
+$card-header-size: 1.1rem;
+
+// Card size variants
+$card-sm-height: 80px;
+$card-sm-padding: 12px;
+$card-lg-height: 160px;
+$card-lg-padding: 20px;
+$card-xl-height: 200px;
+$card-xl-padding: 24px;
+
+// Card Primary
+$card-primary-bg: #ffffff;
+$card-primary-border: 1px solid rgba(25, 118, 210, 0.12);
+$card-primary-shadow: 0 2px 8px rgba(25, 118, 210, 0.1);
+$card-primary-text: #1a1a1a;
+$card-primary-accent: linear-gradient(90deg, #1976d2, #42a5f5);
+$card-primary-icon-bg: linear-gradient(135deg, #1976d2, #42a5f5);
+$card-primary-icon-text: #ffffff;
+
+// Card Secondary
+$card-secondary-bg: #ffffff;
+$card-secondary-border: 1px solid rgba(156, 39, 176, 0.12);
+$card-secondary-shadow: 0 2px 8px rgba(156, 39, 176, 0.1);
+$card-secondary-text: #1a1a1a;
+$card-secondary-accent: linear-gradient(90deg, #9c27b0, #ba68c8);
+$card-secondary-icon-bg: linear-gradient(135deg, #9c27b0, #ba68c8);
+$card-secondary-icon-text: #ffffff;
+
+// Card Success
+$card-success-bg: #ffffff;
+$card-success-border: 1px solid rgba(56, 142, 60, 0.12);
+$card-success-shadow: 0 2px 8px rgba(56, 142, 60, 0.1);
+$card-success-text: #1a1a1a;
+$card-success-accent: linear-gradient(90deg, #388e3c, #66bb6a);
+$card-success-icon-bg: linear-gradient(135deg, #388e3c, #66bb6a);
+$card-success-icon-text: #ffffff;
+
+// Card Warning
+$card-warning-bg: #ffffff;
+$card-warning-border: 1px solid rgba(255, 152, 0, 0.12);
+$card-warning-shadow: 0 2px 8px rgba(255, 152, 0, 0.1);
+$card-warning-text: #1a1a1a;
+$card-warning-accent: linear-gradient(90deg, #ff9800, #ffb74d);
+$card-warning-icon-bg: linear-gradient(135deg, #ff9800, #ffb74d);
+$card-warning-icon-text: #ffffff;
+
+// Card Error
+$card-error-bg: #ffffff;
+$card-error-border: 1px solid rgba(244, 67, 54, 0.12);
+$card-error-shadow: 0 2px 8px rgba(244, 67, 54, 0.1);
+$card-error-text: #1a1a1a;
+$card-error-accent: linear-gradient(90deg, #f44336, #ef5350);
+$card-error-icon-bg: linear-gradient(135deg, #f44336, #ef5350);
+$card-error-icon-text: #ffffff;
+
+// Card Info
+$card-info-bg: #ffffff;
+$card-info-border: 1px solid rgba(33, 150, 243, 0.12);
+$card-info-shadow: 0 2px 8px rgba(33, 150, 243, 0.1);
+$card-info-text: #1a1a1a;
+$card-info-accent: linear-gradient(90deg, #2196f3, #64b5f6);
+$card-info-icon-bg: linear-gradient(135deg, #2196f3, #64b5f6);
+$card-info-icon-text: #ffffff;
+
+// Card Neutral
+$card-neutral-bg: #ffffff;
+$card-neutral-border: 1px solid rgba(158, 158, 158, 0.12);
+$card-neutral-shadow: 0 2px 8px rgba(158, 158, 158, 0.1);
+$card-neutral-text: #1a1a1a;
+$card-neutral-accent: linear-gradient(90deg, #9e9e9e, #bdbdbd);
+$card-neutral-icon-bg: linear-gradient(135deg, #9e9e9e, #bdbdbd);
+$card-neutral-icon-text: #ffffff;
+
+// Card Gradient
+$card-gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+$card-gradient-border: 1px solid rgba(102, 126, 234, 0.2);
+$card-gradient-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+$card-gradient-text: #ffffff;
+$card-gradient-accent: linear-gradient(90deg, #667eea, #764ba2);
+$card-gradient-icon-bg: rgba(255, 255, 255, 0.2);
+$card-gradient-icon-text: #ffffff;
+
+// Card Stats
+$card-stats-bg: #ffffff;
+$card-stats-border: 1px solid rgba(0, 0, 0, 0.08);
+$card-stats-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+$card-stats-text: #1a1a1a;
+$card-stats-accent: linear-gradient(90deg, #6366f1, #8b5cf6);
+$card-stats-icon-bg: linear-gradient(135deg, #6366f1, #8b5cf6);
+$card-stats-icon-text: #ffffff;
+$card-stats-value-size: 2rem;
+$card-stats-value-weight: 700;
+$card-stats-value-color: #1a1a1a;
+$card-stats-label-size: 0.875rem;
+$card-stats-label-color: #6b7280;
+
+// Card Glass
+$card-glass-bg: rgba(255, 255, 255, 0.1);
+$card-glass-border: 1px solid rgba(255, 255, 255, 0.2);
+$card-glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+$card-glass-text: #1a1a1a;
+$card-glass-accent: linear-gradient(90deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+$card-glass-backdrop: blur(10px);
+$card-glass-icon-bg: rgba(255, 255, 255, 0.2);
+$card-glass-icon-text: #1a1a1a;
+
+// Card footer background
+$card-footer-bg: rgba(0, 0, 0, 0.02);
+
+// ===== BUTTON VARIABLES =====
+// Base button properties
+$btn-font-family: inherit;
+$btn-font-weight: 500;
+$btn-border-radius: 8px;
+$btn-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+$btn-disabled-opacity: 0.6;
+$btn-hover-transform: translateY(-1px);
+$btn-active-transform: translateY(0);
+$btn-icon-gap: 8px;
+$btn-shine-gradient: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+
+// Button sizes
+$btn-xs-height: 28px;
+$btn-xs-font-size: 0.75rem;
+$btn-xs-padding: 0 8px;
+$btn-sm-height: 32px;
+$btn-sm-font-size: 0.875rem;
+$btn-sm-padding: 0 12px;
+$btn-md-height: 40px;
+$btn-md-font-size: 0.875rem;
+$btn-md-padding: 0 16px;
+$btn-lg-height: 48px;
+$btn-lg-font-size: 1rem;
+$btn-lg-padding: 0 20px;
+$btn-xl-height: 56px;
+$btn-xl-font-size: 1.125rem;
+$btn-xl-padding: 0 24px;
+
+// Button shapes
+$btn-rounded-radius: 12px;
+$btn-pill-radius: 50px;
+$btn-icon-size: 40px;
+
+// Button outline
+$btn-outline-border-width: 2px;
+
+// Button Primary
+$btn-primary-bg: #1976d2;
+$btn-primary-text: #ffffff;
+$btn-primary-border: none;
+$btn-primary-shadow: 0 2px 4px rgba(25, 118, 210, 0.2);
+$btn-primary-hover-bg: #1565c0;
+$btn-primary-hover-shadow: 0 4px 8px rgba(25, 118, 210, 0.3);
+
+// Button Secondary
+$btn-secondary-bg: #9c27b0;
+$btn-secondary-text: #ffffff;
+$btn-secondary-border: none;
+$btn-secondary-shadow: 0 2px 4px rgba(156, 39, 176, 0.2);
+$btn-secondary-hover-bg: #7b1fa2;
+$btn-secondary-hover-shadow: 0 4px 8px rgba(156, 39, 176, 0.3);
+
+// Button Success
+$btn-success-bg: #388e3c;
+$btn-success-text: #ffffff;
+$btn-success-border: none;
+$btn-success-shadow: 0 2px 4px rgba(56, 142, 60, 0.2);
+$btn-success-hover-bg: #2e7d32;
+$btn-success-hover-shadow: 0 4px 8px rgba(56, 142, 60, 0.3);
+
+// Button Warning
+$btn-warning-bg: #ff9800;
+$btn-warning-text: #ffffff;
+$btn-warning-border: none;
+$btn-warning-shadow: 0 2px 4px rgba(255, 152, 0, 0.2);
+$btn-warning-hover-bg: #f57c00;
+$btn-warning-hover-shadow: 0 4px 8px rgba(255, 152, 0, 0.3);
+
+// Button Error
+$btn-error-bg: #f44336;
+$btn-error-text: #ffffff;
+$btn-error-border: none;
+$btn-error-shadow: 0 2px 4px rgba(244, 67, 54, 0.2);
+$btn-error-hover-bg: #d32f2f;
+$btn-error-hover-shadow: 0 4px 8px rgba(244, 67, 54, 0.3);
+
+// Button Info
+$btn-info-bg: #2196f3;
+$btn-info-text: #ffffff;
+$btn-info-border: none;
+$btn-info-shadow: 0 2px 4px rgba(33, 150, 243, 0.2);
+$btn-info-hover-bg: #1976d2;
+$btn-info-hover-shadow: 0 4px 8px rgba(33, 150, 243, 0.3);
+
+// Button Ghost
+$btn-ghost-text: #666666;
+$btn-ghost-hover-bg: rgba(0, 0, 0, 0.05);
+
+// Button hover effects
+$btn-hover-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+// ===== INPUT VARIABLES =====
+// Base input properties
+$input-font-family: inherit;
+$input-font-size: 0.875rem;
+$input-font-weight: 400;
+$input-line-height: 1.5;
+$input-border-radius: 8px;
+$input-border-width: 1px;
+$input-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+$input-group-spacing: 16px;
+
+// Input colors
+$input-bg: #ffffff;
+$input-text-color: #333333;
+$input-border-color: #e0e0e0;
+$input-placeholder-color: #9e9e9e;
+$input-focus-border-color: #1976d2;
+$input-focus-bg: #ffffff;
+$input-focus-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+$input-focus-transform: translateY(-1px);
+
+// Input sizes
+$input-xs-height: 28px;
+$input-xs-font-size: 0.75rem;
+$input-xs-padding: 6px 8px;
+$input-sm-height: 32px;
+$input-sm-font-size: 0.8125rem;
+$input-sm-padding: 8px 12px;
+$input-md-height: 40px;
+$input-md-font-size: 0.875rem;
+$input-md-padding: 10px 16px;
+$input-lg-height: 48px;
+$input-lg-font-size: 1rem;
+$input-lg-padding: 12px 20px;
+$input-xl-height: 56px;
+$input-xl-font-size: 1.125rem;
+$input-xl-padding: 16px 24px;
+
+// Input padding
+$input-padding: 10px 16px;
+$input-padding-x: 16px;
+$input-with-icon-padding: 40px;
+
+// Input states
+$input-disabled-bg: #f5f5f5;
+$input-disabled-text: #9e9e9e;
+$input-disabled-opacity: 0.6;
+$input-error-border: #f44336;
+$input-error-bg: rgba(244, 67, 54, 0.05);
+$input-error-focus-border: #d32f2f;
+$input-error-focus-shadow: 0 0 0 3px rgba(244, 67, 54, 0.1);
+$input-error-text: #f44336;
+$input-success-border: #4caf50;
+$input-success-bg: rgba(76, 175, 80, 0.05);
+$input-success-focus-border: #388e3c;
+$input-success-focus-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+$input-success-text: #4caf50;
+
+// Input variants
+$input-filled-bg: rgba(0, 0, 0, 0.04);
+$input-filled-focus-bg: rgba(0, 0, 0, 0.06);
+$input-filled-border-radius: 4px 4px 0 0;
+$input-filled-focus-shadow: 0 2px 0 0 $input-focus-border-color;
+$input-outline-border-width: 2px;
+$input-underlined-focus-shadow: 0 2px 0 0 $input-focus-border-color;
+$input-glass-bg: rgba(255, 255, 255, 0.8);
+$input-glass-border: rgba(255, 255, 255, 0.2);
+$input-glass-backdrop: blur(10px);
+$input-glass-focus-bg: rgba(255, 255, 255, 0.9);
+$input-glass-focus-border: rgba(25, 118, 210, 0.3);
+$input-glass-focus-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+
+// Input shapes
+$input-rounded-radius: 12px;
+$input-pill-radius: 50px;
+
+// Input icons and labels
+$input-icon-color: #9e9e9e;
+$input-icon-spacing: 12px;
+$input-label-font-size: 0.875rem;
+$input-label-font-weight: 500;
+$input-label-color: #555555;
+$input-label-spacing: 6px;
+$input-required-color: #f44336;
+$input-floating-padding-top: 20px;
+$input-floating-label-size: 0.75rem;
+$input-helper-font-size: 0.75rem;
+$input-helper-color: #757575;
+$input-helper-spacing: 4px;
+
 
 // Medicine status colors
 $medicine-available: $pharmacy-green;
@@ -41,9 +661,13 @@ $transaction-refund: $pharmacy-purple;
 // SEMANTIC COLORS
 // =============================================================================
 $semantic-success: $brand-positive;
+$semantic-success-dark: #1e8e3e;
 $semantic-warning: $brand-warning;
+$semantic-warning-dark: #e6ac00;
 $semantic-error: $brand-negative;
+$semantic-error-dark: #a50012;
 $semantic-info: $brand-info;
+$semantic-info-dark: #26b5d6;
 
 // =============================================================================
 // LAYOUT DIMENSIONS

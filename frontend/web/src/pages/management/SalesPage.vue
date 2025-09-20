@@ -59,11 +59,10 @@
     <q-card class="q-mb-lg">
       <q-card-section>
         <div class="text-h6 q-mb-md">Sales Trend (Last 30 Days)</div>
-        <div class="chart-container" style="height: 300px; display: flex; align-items: center; justify-content: center; background: #f5f5f5; border-radius: 8px;">
-          <div class="text-center">
-            <q-icon name="show_chart" size="60px" color="grey-5" />
-            <div class="text-h6 text-grey-6 q-mt-md">Sales Chart</div>
-            <p class="text-grey-5">Chart visualization would be displayed here</p>
+        <div class="border-light" style="height: 300px; display: flex; align-items: center; justify-content: center; background: #f5f5f5; border-radius: 8px;">
+          <div class="text-grey-6">
+            <q-icon name="bar_chart" size="3rem" class="q-mb-md" />
+            <div class="text-center">Chart will be displayed here</div>
           </div>
         </div>
       </q-card-section>
@@ -72,25 +71,25 @@
     <!-- Quick Actions -->
     <div class="row q-gutter-md q-mb-lg">
       <div class="col-12 col-md-4">
-        <q-card class="cursor-pointer" @click="$router.push('/app/pos')">
+        <q-card class="interactive-hover" @click="$router.push('/app/pos')">
           <q-card-section class="text-center">
             <q-icon name="point_of_sale" size="3rem" color="primary" />
             <div class="text-h6 q-mt-md">Point of Sale</div>
-            <div class="text-caption text-grey-6">Process new transactions</div>
+            <div class="text-subtitle2">Process new sales</div>
           </q-card-section>
         </q-card>
       </div>
       <div class="col-12 col-md-4">
-        <q-card class="cursor-pointer" @click="$router.push('/app/transactions')">
+        <q-card class="interactive-hover" @click="$router.push('/app/transactions')">
           <q-card-section class="text-center">
             <q-icon name="receipt_long" size="3rem" color="secondary" />
-            <div class="text-h6 q-mt-md">Transaction History</div>
-            <div class="text-caption text-grey-6">View all transactions</div>
+            <div class="text-h6 q-mt-md">Transactions</div>
+            <div class="text-subtitle2">View transaction history</div>
           </q-card-section>
         </q-card>
       </div>
       <div class="col-12 col-md-4">
-        <q-card class="cursor-pointer" @click="$router.push('/app/reports')">
+        <q-card class="interactive-hover" @click="$router.push('/app/reports')">
           <q-card-section class="text-center">
             <q-icon name="assessment" size="3rem" color="positive" />
             <div class="text-h6 q-mt-md">Sales Reports</div>
@@ -469,18 +468,3 @@ onMounted(() => {
   loadSalesData()
 })
 </script>
-
-<style scoped>
-.cursor-pointer {
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.cursor-pointer:hover {
-  transform: translateY(-2px);
-}
-
-.chart-container {
-  border: 1px solid #e0e0e0;
-}
-</style>

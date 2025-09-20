@@ -9,9 +9,12 @@ export const useUserStore = defineStore('user', {
     userStats: {
       total_users: 0,
       active_users: 0,
-      inactive_users: 0,
-      verified_users: 0,
-      unverified_users: 0
+      admin_users: 0,
+      cashier_users: 0,
+      total_user: 0,
+      active_user: 0,
+      today_login: 0,
+      roles_count: 0
     },
     availableRoles: [],
     availablePermissions: [],
@@ -55,14 +58,17 @@ export const useUserStore = defineStore('user', {
         }
 
         const response = await userService.getUsers(queryParams)
-        this.users = response.data.data || []
+        this.users = (response.data || []).map(user => ({
+          ...user,
+          status: user.email_verified_at ? 'Active' : 'Inactive'
+        }))
         
-        if (response.data.meta) {
+        if (response.meta) {
           this.pagination = {
             ...this.pagination,
-            page: response.data.meta.current_page,
-            rowsNumber: response.data.meta.total,
-            rowsPerPage: response.data.meta.per_page
+            page: response.meta.current_page,
+            rowsNumber: response.meta.total,
+            rowsPerPage: response.meta.per_page
           }
         }
 
@@ -84,7 +90,10 @@ export const useUserStore = defineStore('user', {
       this.loading = true
       try {
         const response = await userService.getUser(id)
-        this.user = response.data.data
+        this.user = {
+          ...response.data.data,
+          status: response.data.data.email_verified_at ? 'Active' : 'Inactive'
+        }
         return { success: true }
       } catch (error) {
         const message = error.message || 'Gagal mengambil data pengguna'
@@ -104,8 +113,25 @@ export const useUserStore = defineStore('user', {
       try {
         const response = await userService.createUser(userData)
         
-        // Add to local state
-        this.users.unshift(response.data.data)
+        // Validate response structure - apiService returns response.data directly
+        // So response = { success, message, data }
+        if (response && response.success === true && response.data) {
+          const newUser = {
+            ...response.data,
+            status: response.data.email_verified_at ? 'Active' : 'Inactive'
+          }
+          
+          // Add to local state - ensure this.users is an array
+          if (Array.isArray(this.users)) {
+            this.users.unshift(newUser)
+          } else {
+            console.warn('this.users is not an array, initializing as empty array')
+            this.users = [newUser]
+          }
+        } else {
+          console.error('Invalid response structure:', response)
+          throw new Error('Invalid response structure from server')
+        }
         
         Notify.create({
           type: 'positive',
@@ -113,7 +139,7 @@ export const useUserStore = defineStore('user', {
           position: 'top'
         })
         
-        return { success: true, data: response.data.data }
+        return { success: true, data: response.data }
       } catch (error) {
         const message = error.message || 'Gagal membuat pengguna'
         Notify.create({
@@ -133,13 +159,18 @@ export const useUserStore = defineStore('user', {
         const response = await userService.updateUser(id, userData)
         
         // Update local state
+        const updatedUser = {
+          ...response.data,
+          status: response.data.email_verified_at ? 'Active' : 'Inactive'
+        }
+        
         const index = this.users.findIndex(user => user.id === id)
         if (index !== -1) {
-          this.users[index] = response.data.data
+          this.users[index] = updatedUser
         }
         
         if (this.user && this.user.id === id) {
-          this.user = response.data.data
+          this.user = updatedUser
         }
         
         Notify.create({
@@ -194,23 +225,25 @@ export const useUserStore = defineStore('user', {
       }
     },
 
-    async toggleUserStatus(id, status) {
+    async toggleUserStatus(id) {
       try {
-        await userService.toggleStatus(id, status)
+        const response = await userService.toggleStatus(id)
         
-        // Update local state
+        // Update local state based on response
         const index = this.users.findIndex(user => user.id === id)
         if (index !== -1) {
-          this.users[index].is_active = status
+          this.users[index].status = response.data.status
+          this.users[index].email_verified_at = response.data.user.email_verified_at
         }
         
         if (this.user && this.user.id === id) {
-          this.user.is_active = status
+          this.user.status = response.data.status
+          this.user.email_verified_at = response.data.user.email_verified_at
         }
         
         Notify.create({
           type: 'positive',
-          message: `Pengguna berhasil ${status ? 'diaktifkan' : 'dinonaktifkan'}`,
+          message: `User status updated to ${response.data.status}`,
           position: 'top'
         })
         
@@ -258,7 +291,7 @@ export const useUserStore = defineStore('user', {
     async fetchUserStats() {
       try {
         const response = await userService.getUserStats()
-        this.userStats = response.data.data || {}
+        this.userStats = response.data || {}
         return { success: true }
       } catch (error) {
         const message = error.message || 'Gagal mengambil statistik pengguna'
@@ -271,11 +304,25 @@ export const useUserStore = defineStore('user', {
       }
     },
 
-    async fetchAvailableRoles() {
+    async fetchAvailableRoles(params = {}) {
       try {
-        const response = await userService.getAvailableRoles()
-        this.availableRoles = response.data.data || []
-        return { success: true }
+        const response = await userService.getAvailableRoles(params)
+
+        const roles = response.data || []
+        
+        // Format roles for dropdown usage
+        const formattedRoles = roles.map(role => ({
+          value: role.value,
+          label: role.label,
+          name: role.name
+        }))
+        
+        // If no search params, update the store state
+        if (!params.search) {
+          this.availableRoles = formattedRoles
+        }
+        
+        return { success: true, data: formattedRoles }
       } catch (error) {
         const message = error.message || 'Gagal mengambil daftar role'
         Notify.create({
@@ -300,6 +347,30 @@ export const useUserStore = defineStore('user', {
           position: 'top'
         })
         return { success: false, message }
+      }
+    },
+
+    async resetPassword(userId) {
+      try {
+        const response = await userService.resetPassword(userId)
+        
+        Notify.create({
+          type: 'positive',
+          message: 'Password reset email sent successfully',
+          position: 'top'
+        })
+        
+        return { success: true, data: response.data }
+      } catch (error) {
+        const message = error.response?.data?.message || error.message || 'Failed to reset password'
+        
+        Notify.create({
+          type: 'negative',
+          message,
+          position: 'top'
+        })
+        
+        throw error
       }
     },
 

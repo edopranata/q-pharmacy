@@ -16,43 +16,13 @@
     </div>
 
     <!-- User Statistics -->
-    <div class="row q-col-gutter-md q-mb-lg">
-      <div class="col-12 col-md-3">
-        <q-card class="bg-primary text-white">
-          <q-card-section>
-            <div class="text-h6">Total Users</div>
-            <div class="text-h4">{{ totalUsers }}</div>
-            <div class="text-caption">Active system users</div>
-          </q-card-section>
-        </q-card>
-      </div>
-      <div class="col-12 col-md-3">
-        <q-card class="bg-secondary text-white">
-          <q-card-section>
-            <div class="text-h6">Active Users</div>
-            <div class="text-h4">{{ activeUsers }}</div>
-            <div class="text-caption">Currently active</div>
-          </q-card-section>
-        </q-card>
-      </div>
-      <div class="col-12 col-md-3">
-        <q-card class="bg-positive text-white">
-          <q-card-section>
-            <div class="text-h6">Admins</div>
-            <div class="text-h4">{{ adminUsers }}</div>
-            <div class="text-caption">Administrator accounts</div>
-          </q-card-section>
-        </q-card>
-      </div>
-      <div class="col-12 col-md-3">
-        <q-card class="bg-info text-white">
-          <q-card-section>
-            <div class="text-h6">Cashiers</div>
-            <div class="text-h4">{{ cashierUsers }}</div>
-            <div class="text-caption">Cashier accounts</div>
-          </q-card-section>
-        </q-card>
-      </div>
+    <div class="q-mb-lg">
+      <UserStatsCard 
+        :stats="userStats" 
+        :loading="userStore.loading"
+        :error="statsError"
+        @retry="retryLoadStats"
+      />
     </div>
 
     <!-- Filters -->
@@ -61,11 +31,12 @@
         <div class="row q-gutter-md">
           <div class="col-12 col-md-3">
             <q-input
+              v-model="userStore.filters.search"
               debounce="500"
-              v-model="localFilters.search"
-              placeholder="Search users..."
               outlined
               dense
+              placeholder="Cari pengguna..."
+              clearable
             >
               <template v-slot:prepend>
                 <q-icon name="search" />
@@ -74,7 +45,7 @@
           </div>
           <div class="col-12 col-md-2">
             <q-select
-              v-model="localFilters.role"
+              v-model="userStore.filters.role"
               :options="roleOptions"
               label="Role"
               outlined
@@ -83,16 +54,14 @@
               use-input
               input-debounce="500"
               @filter="filterRoles"
-              @input-value="setRoleModel"
               option-value="name"
               option-label="label"
-              emit-value
               map-options
             />
           </div>
           <div class="col-12 col-md-2">
             <q-select
-              v-model="localFilters.status"
+              v-model="userStore.filters.status"
               :options="statusOptions"
               label="Status"
               outlined
@@ -116,12 +85,15 @@
     <q-card>
       <q-card-section>
         <q-table
+          ref="userTable"
           :rows="users"
           :columns="columns"
           row-key="id"
           :loading="loading"
           v-model:pagination="pagination"
           @request="onRequest"
+          binary-state-sort
+          :rows-per-page-options="[10, 25, 50, 100]"
         >
           <template v-slot:body-cell-avatar="props">
             <q-td :props="props">
@@ -181,7 +153,6 @@
                 <q-tooltip>Edit User</q-tooltip>
               </q-btn>
               <q-btn
-                v-if="!props.row.email_verified_at"
                 flat
                 round
                 size="sm"
@@ -258,12 +229,11 @@
                   use-chips
                   emit-value
                   map-options
-                  option-value="value"
+                  option-value="name"
                   option-label="label"
                   use-input
                   input-debounce="500"
                   @filter="filterFormRoles"
-                  @input-value="setFormRoleModel"
                   clearable
                   :rules="[
                         val => val && val.length > 0 || 'Minimal satu role harus dipilih',
@@ -398,6 +368,12 @@
                 <q-item-label caption>{{ selectedUser.last_login ? DateUtils.formatDateLong(selectedUser.last_login) : 'Never' }}</q-item-label>
               </q-item-section>
             </q-item>
+            <q-item>
+              <q-item-section>
+                <q-item-label>Last Activity</q-item-label>
+                <q-item-label caption>{{ selectedUser.last_activity ? DateUtils.formatDateLong(selectedUser.last_activity) : 'Never' }}</q-item-label>
+              </q-item-section>
+            </q-item>
           </q-list>
         </q-card-section>
 
@@ -415,6 +391,7 @@ import { ref, reactive, computed, onMounted, watch } from 'vue'
 import { useQuasar } from 'quasar'
 import { useUserStore } from 'src/stores'
 import { DateUtils } from 'src/utils'
+import UserStatsCard from 'src/components/UserStatsCard.vue'
 
 const $q = useQuasar()
 const userStore = useUserStore()
@@ -426,35 +403,15 @@ const selectedUser = ref(null)
 
 const roleOptions = ref([])
 const statusOptions = ['Active', 'Inactive']
+const statsError = ref(null)
 
-// Local filters for v-model (separated from store filters)
-const localFilters = reactive({
-  search: '',
-  role: null,
-  status: null
-})
-
-// Watcher to update filters from local filters with debounce
+// Watcher untuk filter changes
 watch(
-  () => localFilters.search,
+  () => [userStore.filters.search, userStore.filters.role, userStore.filters.status],
   () => {
-    updateFiltersAndLoad()
+    loadUsers()
   },
-  { debounce: 500 }
-)
-
-watch(
-  () => localFilters.role,
-  () => {
-    updateFiltersAndLoad()
-  }
-)
-
-watch(
-  () => localFilters.status,
-  () => {
-    updateFiltersAndLoad()
-  }
+  { deep: true }
 )
 
 const userForm = reactive({
@@ -487,16 +444,26 @@ const formRoleLoading = ref(false)
 // Computed properties from store
 const users = computed(() => userStore.users)
 const loading = computed(() => userStore.loading)
-const pagination = computed({
-  get: () => userStore.pagination,
-  set: (value) => userStore.setPagination(value)
-})
 const userStats = computed(() => userStore.userStats)
 
-const totalUsers = computed(() => userStats.value.total_users || 0)
-const activeUsers = computed(() => userStats.value.active_users || 0)
-const adminUsers = computed(() => userStats.value.admin_users || 0)
-const cashierUsers = computed(() => userStats.value.cashier_users || 0)
+// Menggunakan pagination dari store dengan fallback untuk UI
+const pagination = computed({
+  get: () => {
+    const storePagination = userStore.pagination
+    return {
+      sortBy: storePagination.sortBy,
+      descending: storePagination.descending,
+      page: storePagination.page,
+      rowsPerPage: storePagination.rowsPerPage,
+      rowsNumber: storePagination.rowsNumber
+    }
+  },
+  set: (val) => {
+    userStore.setPagination(val)
+  }
+})
+
+
 
 // Avatar URL helper
 const getUserAvatarUrl = (user) => {
@@ -560,6 +527,14 @@ const columns = [
     format: val => val ? DateUtils.formatDateLong(val) : 'Never'
   },
   {
+    name: 'last_activity',
+    label: 'Last Activity',
+    field: 'last_activity',
+    align: 'left',
+    sortable: true,
+    format: val => val ? DateUtils.formatDateLong(val) : 'Never'
+  },
+  {
     name: 'actions',
     label: 'Actions',
     field: 'actions',
@@ -591,55 +566,82 @@ const getRoleIcon = (role) => {
 
 
 
-
-
-const updateFiltersAndLoad = () => {
-  userStore.setFilters({
-    search: localFilters.search,
-    role: localFilters.role,
-    status: localFilters.status
-  })
-  loadUsers()
-}
-
-const loadUsers = async () => {
+const loadUsers = async (props = {}) => {
   try {
-    await userStore.fetchUsers()
+    const { page = pagination.value.page, rowsPerPage = pagination.value.rowsPerPage, sortBy, descending } = props.pagination || {}
+    
+    // Update store pagination jika ada perubahan sorting
+    if (sortBy !== undefined) {
+      userStore.setPagination({
+        ...userStore.pagination,
+        sortBy,
+        descending,
+        page
+      })
+    } else {
+      userStore.setPagination({
+        ...userStore.pagination,
+        page,
+        rowsPerPage
+      })
+    }
+    
+    const params = {
+      page,
+      per_page: rowsPerPage,
+      sort_by: sortBy || userStore.pagination.sortBy,
+      sort_order: (descending !== undefined ? descending : userStore.pagination.descending) ? 'desc' : 'asc'
+    }
+    
+    // Add search filter
+    if (userStore.filters.search && userStore.filters.search.trim()) {
+      params.search = userStore.filters.search.trim()
+    }
+    
+    // Add role filter
+    if (userStore.filters.role && userStore.filters.role.value) {
+      params.role = userStore.filters.role.value
+    }
+    
+    // Add status filter
+    if (userStore.filters.status !== null && userStore.filters.status !== undefined) {
+      params.status = userStore.filters.status.value
+    }
+    
+    await userStore.fetchUsers(params)
   } catch (error) {
     console.error('Error loading users:', error)
-    $q.notify({
-      type: 'negative',
-      message: 'Failed to load users'
-    })
   }
 }
 
 const loadUserStats = async () => {
   try {
-    await userStore.fetchUserStats()
+    statsError.value = null
+    const result = await userStore.fetchUserStats()
+    if (!result.success) {
+      statsError.value = result.message || 'Failed to load user statistics'
+    }
   } catch (error) {
     console.error('Error loading user stats:', error)
-    $q.notify({
-      type: 'negative',
-      message: 'Failed to load user statistics'
-    })
+    statsError.value = error.message || 'Failed to load user statistics'
   }
 }
 
-const refreshData = () => {
-  loadUsers()
-  loadUserStats()
+const retryLoadStats = async () => {
+  await loadUserStats()
 }
 
+const refreshData = async () => {
+  await Promise.all([
+    loadUsers(),
+    loadUserStats()
+  ])
+}
+
+
+
 const onRequest = (props) => {
-  const { page, rowsPerPage, sortBy, descending } = props.pagination
-  userStore.setPagination({
-    page,
-    rowsPerPage,
-    sortBy,
-    descending
-  })
-  loadUsers()
+  loadUsers(props)
 }
 
 const viewUser = (user) => {
@@ -650,8 +652,6 @@ const viewUser = (user) => {
 const openAddDialog = async () => {
   editMode.value = false
   closeDialog() // Reset form
-  // Load form role options when opening dialog (10 initial data)
-  formRoleOptions.value = await loadFormRoleOptions('', 10)
   showAddDialog.value = true
 }
 
@@ -665,15 +665,15 @@ const editUser = async (user) => {
   userForm.password = ''
   userForm.password_confirmation = ''
   
-  // Load form role options when opening edit dialog (10 initial data)
-  formRoleOptions.value = await loadFormRoleOptions('', 10)
+  // Load initial role options for form dropdown
+  await loadFormRoleOptions('', 10)
   
-  // Map user roles to role IDs for q-select
+  // Map user roles to role names for q-select
   if (user.roles && user.roles.length > 0) {
     userForm.roles = user.roles.map(userRole => {
       const option = formRoleOptions.value.find(option => option.name === userRole.name)
-      return option ? option.value : null
-    }).filter(id => id !== null)
+      return option ? option.name : null
+    }).filter(name => name !== null)
   } else {
     userForm.roles = []
   }
@@ -687,8 +687,8 @@ const editUserFromView = () => {
 }
 
 const toggleUserStatus = (user) => {
-  const newStatus = user.status === 'active' ? 'inactive' : 'active'
-  const action = newStatus === 'active' ? 'activate' : 'deactivate'
+  const newStatus = user.status === 'Active' ? 'Inactive' : 'Active'
+  const action = newStatus === 'Active' ? 'activate' : 'deactivate'
   
   $q.dialog({
     title: 'Confirm Status Change',
@@ -697,17 +697,9 @@ const toggleUserStatus = (user) => {
     persistent: true
   }).onOk(async () => {
     try {
-      await userStore.toggleUserStatus(user.id, newStatus)
-      $q.notify({
-        type: 'positive',
-        message: `User ${action}d successfully`
-      })
+      await userStore.toggleUserStatus(user.id)
     } catch (error) {
       console.error('Error toggling user status:', error)
-      $q.notify({
-        type: 'negative',
-        message: `Failed to ${action} user`
-      })
     }
   })
 }
@@ -721,16 +713,8 @@ const resetPassword = (user) => {
   }).onOk(async () => {
     try {
       await userStore.resetPassword(user.id)
-      $q.notify({
-        type: 'positive',
-        message: 'Password reset email sent successfully'
-      })
     } catch (error) {
       console.error('Error resetting password:', error)
-      $q.notify({
-        type: 'negative',
-        message: 'Failed to reset password'
-      })
     }
   })
 }
@@ -752,16 +736,8 @@ const deleteUser = (user) => {
   }).onOk(async () => {
     try {
       await userStore.deleteUser(user.id)
-      $q.notify({
-        type: 'positive',
-        message: 'User deleted successfully'
-      })
     } catch (error) {
       console.error('Error deleting user:', error)
-      $q.notify({
-        type: 'negative',
-        message: 'Failed to delete user'
-      })
     }
   })
 }
@@ -820,30 +796,29 @@ const saveUser = async () => {
   }
   
   try {
-    // Transform role IDs to role names for backend
+    // userForm.roles already contains role names (strings) from q-select
+    // No need to transform since we're using emit-value and option-value="name"
     console.log('userForm.roles:', userForm.roles)
     console.log('formRoleOptions.value:', formRoleOptions.value)
-    
-    const roleNames = userForm.roles.map(roleId => {
-      const role = formRoleOptions.value.find(option => option.value === roleId)
-      console.log(`Mapping roleId ${roleId} to role:`, role)
-      return role ? role.name : null
-    }).filter(name => name !== null)
-    
-    console.log('Final roleNames:', roleNames)
     
     // Prepare data according to backend API requirements
     const userData = {
       name: userForm.name,
       email: userForm.email,
       phone: userForm.phone || '',
-      roles: roleNames // Backend expects array of role names
+      status: userForm.status,
+      roles: userForm.roles // Backend expects array of role names
     }
     
-    // Add password fields only if password is provided
-    if (userForm.password) {
+    // Add password fields only for create or when password is provided for update
+    if (!editMode.value) {
+      // For create, password is required
       userData.password = userForm.password
       userData.password_confirmation = userForm.password_confirmation
+    } else if (userForm.password) {
+      // For update, only add password if provided (optional)
+      userData.password = userForm.password
+      // Note: backend update doesn't expect password_confirmation
     }
 
     if (editMode.value) {
@@ -851,16 +826,12 @@ const saveUser = async () => {
     } else {
       await userStore.createUser(userData)
     }
-    $q.notify({
-      type: 'positive',
-      message: `User ${editMode.value ? 'updated' : 'created'} successfully`
-    })
 
     closeDialog()
   } catch (error) {
     console.error('Error saving user:', error)
     
-    // Handle validation errors from backend
+    // Handle validation errors from backend - only show specific validation errors
     if (error.response && error.response.data && error.response.data.errors) {
       const errors = error.response.data.errors
       const errorMessages = Object.values(errors).flat()
@@ -868,12 +839,8 @@ const saveUser = async () => {
         type: 'negative',
         message: errorMessages.join(', ')
       })
-    } else {
-      $q.notify({
-        type: 'negative',
-        message: `Failed to ${editMode.value ? 'update' : 'create'} user`
-      })
     }
+    // Note: General error notifications are handled by the Pinia Store
   }
 }
 
@@ -893,14 +860,20 @@ const closeDialog = () => {
 // Load role options for filter dropdown
 const loadRoleOptions = async (search = '', limit = 10) => {
   try {
-    await userStore.fetchAvailableRoles()
-    const roles = userStore.availableRoles.filter(role => 
-      !search || role.label.toLowerCase().includes(search.toLowerCase())
-    ).slice(0, limit)
-    return roles.map(role => ({
-      label: role.label,
-      value: role.value
-    }))
+    const params = {
+      search: search,
+      limit: limit
+    }
+
+    const response = await userStore.fetchAvailableRoles(params)
+
+    if (response.success) {
+      return response.data.map(role => ({
+        label: role.label,
+        value: role.name
+      }))
+    }
+    return []
   } catch (error) {
     console.error('Error loading role options:', error)
     return []
@@ -908,37 +881,35 @@ const loadRoleOptions = async (search = '', limit = 10) => {
 }
 
 // Filter roles for dropdown search
-const filterRoles = async (val, update, abort) => {
+const filterRoles = async (val, update) => {
   try {
-    const roles = await loadRoleOptions(val, 10)
+    const roles = await loadRoleOptions(val ?? '', 10)
     update(() => {
       roleOptions.value = roles
     })
   } catch (error) {
     console.error('Error filtering roles:', error)
-    abort()
   }
-}
-
-// Set role model for input
-const setRoleModel = () => {
-  // This function is called when user types in the input
-  // We don't need to do anything special here as the filtering is handled by filterRoles
 }
 
 // Load role options for form dropdown
 const loadFormRoleOptions = async (search = '', limit = 10) => {
   try {
     formRoleLoading.value = true
-    await userStore.fetchAvailableRoles()
-    const roles = userStore.availableRoles.filter(role => 
-      !search || role.label.toLowerCase().includes(search.toLowerCase())
-    ).slice(0, limit)
-    return roles.map(role => ({
-      label: role.label,
-      value: role.value,
-      name: role.name // Include name field for role mapping
-    }))
+    const params = {
+      search: search,
+      limit: limit
+    }
+    const response = await userStore.fetchAvailableRoles(params)
+    if (response.success) {
+      const mappedRoles = response.data.map(role => ({
+        label: role.label,
+        name: role.name,
+      }))
+      formRoleOptions.value = mappedRoles
+      return mappedRoles
+    }
+    return []
   } catch (error) {
     console.error('Error loading form role options:', error)
     return []
@@ -950,7 +921,7 @@ const loadFormRoleOptions = async (search = '', limit = 10) => {
 // Filter roles for form dropdown search
 const filterFormRoles = async (val, update, abort) => {
   try {
-    const roles = await loadFormRoleOptions(val, 10)
+    const roles = await loadFormRoleOptions(val ?? '', 10)
     update(() => {
       formRoleOptions.value = roles
     })
@@ -958,12 +929,6 @@ const filterFormRoles = async (val, update, abort) => {
     console.error('Error filtering form roles:', error)
     abort()
   }
-}
-
-// Set form role model for input
-const setFormRoleModel = () => {
-  // This function is called when user types in the input
-  // We don't need to do anything special here as the filtering is handled by filterFormRoles
 }
 
 // Refresh form role options manually
@@ -988,28 +953,12 @@ const refreshFormRoleOptions = async () => {
   }
 }
 
-// Load roles for user form (all roles)
-const loadRoles = async () => {
-  try {
-    await userStore.fetchAvailableRoles()
-  } catch (error) {
-    console.error('Error loading roles:', error)
-  }
-}
-
-// Initialize local filters on mount
+// Initialize data on mount
 onMounted(async () => {
-  localFilters.search = ''
-  localFilters.role = null
-  localFilters.status = null
-  
-  // Load initial role options for filter (10 items)
-  roleOptions.value = await loadRoleOptions('', 10)
-  
-  // Don't load form role options on mount - only when dialog opens
-  
-  await loadRoles()
+  // Load users for q-table
   await loadUsers()
+
+  // load user stats
   await loadUserStats()
 })
 </script>
